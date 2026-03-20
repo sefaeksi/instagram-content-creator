@@ -170,13 +170,22 @@ def get_trending_topic() -> dict:
     prompt = """Search the web right now for a recently trended Instagram Reel topic in the Lifestyle and Self-Improvement niche.
 Find something that went viral or peaked in popularity in the last few weeks on Instagram.
 
+LANGUAGE RULE: ALL text fields must be in Turkish BUT using ONLY English keyboard characters.
+No special Turkish chars (no s-cedilla, no g-breve, no u-umlaut, no o-umlaut, no dotless-i, no c-cedilla).
+Example: write "guzellesmek" not "guzelle\u015fmek", "cok" not "\u00e7ok", "icerik" not "i\u00e7erik".
+
 Return ONLY a valid JSON object — no markdown, no extra text:
 {
-  "topic": "name of the trending topic or challenge",
-  "why_trending": "brief explanation of why it went viral (1-2 sentences, English keyboard chars only, no Turkish special chars)",
-  "peak_period": "when it trended (e.g. 'February 2026')",
-  "niche_adaptation": "how to adapt this trend for a Lifestyle/Self-Improvement account (1-2 sentences, Turkish with English keyboard chars only)",
-  "example_hook": "a ready-to-use hook sentence in Turkish using this trend (English keyboard chars only)"
+  "topic": "trendin adi veya challenge adi (Turkce, Ingilizce klavye)",
+  "peak_period": "ne zaman trend oldu (ornegin 'Mart 2026')",
+  "why_trending": "neden viral oldu — detayli aciklama, 2-3 cumle (Turkce, Ingilizce klavye)",
+  "platform_stats": "kac video, kac goruntulenme gibi rakamlari varsa yaz, yoksa genel populerlik bilgisi (Turkce, Ingilizce klavye)",
+  "niche_adaptation": "Yasam Tarzi/Kisisel Gelisim hesabi bu trendi nasil kullanabilir — somut ve detayli, 3-4 cumle (Turkce, Ingilizce klavye)",
+  "content_angle": "bu trend icin onerilecek icecek acisi veya bakis acisi, 2-3 cumle (Turkce, Ingilizce klavye)",
+  "video_tips": "video cekim, kurgu ve sunum ipuclari — en az 3 madde (Turkce, Ingilizce klavye)",
+  "recommended_audio": "bu trend icin uygun ses/muzik turu veya varsa spesifik trend sesi (Turkce, Ingilizce klavye)",
+  "hashtags": ["#trend1", "#trend2", "#trend3", "#trend4", "#trend5"],
+  "example_hook": "bu trendi kullanan, kullanima hazir Turkce hook cumlesi (Ingilizce klavye)"
 }"""
 
     response = client.models.generate_content(
@@ -376,18 +385,42 @@ def create_pdf(ideas: list[dict], output_path: Path, trending: dict = None):
             ("RIGHTPADDING",  (1, 0), (1, 0), 10),
         ]))
 
+        video_tips = trending.get("video_tips", [])
+        if isinstance(video_tips, list):
+            video_tips_text = "  ".join(f"&bull; {t}" for t in video_tips)
+        else:
+            video_tips_text = str(video_tips)
+
+        hashtags = trending.get("hashtags", [])
+        hashtags_text = "  ".join(hashtags) if isinstance(hashtags, list) else str(hashtags)
+
         bonus_elements = [
             Paragraph("TREND KONUSU", s_label),
             Paragraph(trending.get("topic", ""), s_bonus_topic),
 
-            Paragraph("NEDEN TREND OLDU", s_label),
-            Paragraph(trending.get("why_trending", ""), s_bonus_body),
-
             Paragraph("TREND DONEMI", s_label),
             Paragraph(trending.get("peak_period", ""), s_bonus_body),
 
+            Paragraph("NEDEN VIRAL OLDU", s_label),
+            Paragraph(trending.get("why_trending", ""), s_bonus_body),
+
+            Paragraph("PLATFORM ISTATISTIKLERI", s_label),
+            Paragraph(trending.get("platform_stats", ""), s_bonus_body),
+
             Paragraph("NISINE NASIL UYARLANIR", s_label),
             Paragraph(trending.get("niche_adaptation", ""), s_bonus_body),
+
+            Paragraph("ICERIK ACISI", s_label),
+            Paragraph(trending.get("content_angle", ""), s_bonus_body),
+
+            Paragraph("VIDEO IPUCLARI", s_label),
+            Paragraph(video_tips_text, s_bonus_body),
+
+            Paragraph("ONERILECEK SES / MUZIK", s_label),
+            Paragraph(trending.get("recommended_audio", ""), s_bonus_body),
+
+            Paragraph("TREND HASHTAG'LER", s_label),
+            Paragraph(hashtags_text, s_hashtag),
 
             Paragraph("HAZIR HOOK", s_label),
             Paragraph(f"\u201c{trending.get('example_hook', '')}\u201d", s_bonus_hook),
