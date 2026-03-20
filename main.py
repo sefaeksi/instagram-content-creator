@@ -44,6 +44,7 @@ GMAIL_PASSWORD   = os.getenv("GMAIL_APP_PASSWORD")
 DRIVE_ROOT       = "Instagram Content Ideas"
 SCOPES           = ["https://www.googleapis.com/auth/drive"]
 ACCOUNTS_FILE    = Path(__file__).parent / "accounts.json"
+SENT_LOG_FILE    = Path(__file__).parent / "sent_log.json"
 
 # ---------------------------------------------------------------------------
 # Accounts
@@ -52,6 +53,25 @@ ACCOUNTS_FILE    = Path(__file__).parent / "accounts.json"
 def load_accounts():
     with open(ACCOUNTS_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+# ---------------------------------------------------------------------------
+# Daily send log  (prevents duplicate emails on the same day)
+# ---------------------------------------------------------------------------
+
+def already_sent_today(username):
+    today = datetime.now().strftime("%Y-%m-%d")
+    if not SENT_LOG_FILE.exists():
+        return False
+    log = json.loads(SENT_LOG_FILE.read_text(encoding="utf-8"))
+    return log.get(username) == today
+
+
+def mark_sent_today(username):
+    today = datetime.now().strftime("%Y-%m-%d")
+    log = json.loads(SENT_LOG_FILE.read_text(encoding="utf-8")) if SENT_LOG_FILE.exists() else {}
+    log[username] = today
+    SENT_LOG_FILE.write_text(json.dumps(log, indent=2), encoding="utf-8")
 
 
 # ---------------------------------------------------------------------------
@@ -560,8 +580,12 @@ def process_account(account, drive_service):
 
     if send_email:
         # New accounts — email only
-        print(f"  Sending email to {account['email']}...")
-        send_email_with_pdf(account["email"], pdf_path, account)
+        if already_sent_today(username):
+            print(f"  Skipping email — already sent to @{username} today.")
+        else:
+            print(f"  Sending email to {account['email']}...")
+            send_email_with_pdf(account["email"], pdf_path, account)
+            mark_sent_today(username)
     else:
         # Owner account (ssefaeksii) — Google Drive only
         print("  Uploading to Google Drive...")
