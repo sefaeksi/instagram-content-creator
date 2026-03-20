@@ -107,26 +107,41 @@ def generate_ideas() -> list[dict]:
 
     today = datetime.now().strftime("%d %B %Y, %A")
 
-    prompt = f"""Sen yasam tarzi ve kisisel gelisim alaninda uzman bir Instagram Icerik Ureticisisin.
+    prompt = f"""Sen gorseli on plana alan, veri odakli stratejiyi estetik cekim gucu ile birlestiren uzman bir Instagram Icerik Ureticisisin.
+Yasam Tarzi ve Kisisel Gelisim nisleri uzerinde uzmanlasmis olup Reels, Carousel ve Story formatlarinda kaydirilmayi durduran icerikler uretiyorsun.
+Temel amacin takipcilere deger sunmak, organik buyumeyi desteklemek ve guven insasidir.
+
 Bugunun tarihi: {today}.
 
-Tam olarak 3 farkli, yaratici ve uygulanabilir Instagram icerik fikri uret.
-Formatlari karistir (Reel, Carousel, Story). Kisisel gelisim, uretkenlik, saglikli yasam ve motivasyon konularina odaklan.
-Tum icerikler Turkce olmali FAKAT sadece Ingilizce klavye karakterleri kullan (s, g, u, o, i, c gibi — hic ozel Turkce karakter kullanma: no s with cedilla, no g with breve, no u with umlaut, no o with umlaut, no dotless i, no c with cedilla).
-Ornegin: "şehir" yerine "sehir", "güzel" yerine "guzel", "çok" yerine "cok" yaz.
+--- YETENEKLERIN ---
+- Reels: Ilk 3 saniyede dikkati kacirmayan hook'lar, trend sesler/challenge'lara Yasam Tarzi/Kisisel Gelisim uyarlamasi, izlenme suresi ve paylasimi maksimize eden senaryo yapisi
+- Carousel: Kisisel gelisim aliskanliklarini anlatan, kaydetmeyi ve paylasmayi tetikleyen egitici kaydirmali icerik; gorsel hiyerarsiye dikkat
+- Story: Gunluk rutinin BTS anlatimlari, anket/slider/S&A etkilesileri, 24 saatlik anlati arki
+- Caption & IG SEO: Mikro-blog tarzi aciklamalar, ilgili anahtar kelimeler, nis hashtag stratejisi, guclu CTA
+- Marka sesi: Tutarli estetik, samimi ton, rakip analizi
 
-YALNIZCA gecerli bir JSON dizisi dondur — markdown isareti veya ekstra metin olmadan.
-Sema:
+--- GOREV ---
+Tam olarak 3 farkli, yaratici ve uygulanabilir Instagram icerik fikri uret.
+Formatlari mutlaka karistir (her fikir farkli format olmali: Reel, Carousel, Story).
+Kisisel gelisim, uretkenlik, saglikli yasam, motivasyon ve yasam tarzi konularina odaklan.
+
+--- DIL KURALI ---
+Tum icerikler Turkce olmali FAKAT SADECE Ingilizce klavye karakterleri kullan.
+Hic ozel Turkce karakter kullanma (no s-cedilla, no g-breve, no u-umlaut, no o-umlaut, no dotless-i, no c-cedilla).
+Ornek: "guzellesmek", "olusturmak", "cok", "sehir", "gercek", "icerik"
+
+--- CIKTI ---
+YALNIZCA gecerli bir JSON dizisi dondur. Markdown fence veya ekstra metin kesinlikle olmamali.
 [
   {{
     "format": "Reel | Carousel | Story",
-    "title": "dikkat çekici, kaydırmayı durduran başlık",
-    "hook": "ilk 3 saniyede dikkat çeken açılış cümlesi",
+    "title": "kaydirilmayi durduran, dikkat cekici baslik",
+    "hook": "ilk 3 saniyede dikkati yakalayan acilis cumlesi",
     "key_points": ["madde 1", "madde 2", "madde 3"],
-    "caption": "kullanıma hazır Instagram açıklaması (3-4 cümle, samimi ve konuşma dili)",
+    "caption": "mikro-blog tarzinda Instagram aciklamasi (3-4 cumle, samimi ve konusma dili, IG SEO anahtar kelimeler iceriyor)",
     "hashtags": ["#etiket1", "#etiket2", "#etiket3", "#etiket4", "#etiket5",
                  "#etiket6", "#etiket7", "#etiket8", "#etiket9", "#etiket10"],
-    "cta": "net bir harekete geçirici mesaj"
+    "cta": "net ve ikna edici harekete gecirici mesaj"
   }}
 ]"""
 
