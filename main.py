@@ -107,15 +107,16 @@ def generate_ideas() -> list[dict]:
 
     today = datetime.now().strftime("%d %B %Y, %A")
 
-    prompt = f"""Sen Yaşam Tarzı ve Kişisel Gelişim alanında uzman bir Instagram İçerik Üreticisisin.
-Bugünün tarihi: {today}.
+    prompt = f"""Sen yasam tarzi ve kisisel gelisim alaninda uzman bir Instagram Icerik Ureticisisin.
+Bugunun tarihi: {today}.
 
-Tam olarak 3 farklı, yaratıcı ve uygulanabilir Instagram içerik fikri üret.
-Formatları karıştır (Reel, Carousel, Story). Kişisel gelişim, üretkenlik, sağlıklı yaşam ve motivasyon konularına odaklan.
-Tüm içerikler Türkçe olmalı. Türk Instagram kullanıcılarının diline ve kültürüne uygun yaz.
+Tam olarak 3 farkli, yaratici ve uygulanabilir Instagram icerik fikri uret.
+Formatlari karistir (Reel, Carousel, Story). Kisisel gelisim, uretkenlik, saglikli yasam ve motivasyon konularina odaklan.
+Tum icerikler Turkce olmali FAKAT sadece Ingilizce klavye karakterleri kullan (s, g, u, o, i, c gibi — hic ozel Turkce karakter kullanma: no s with cedilla, no g with breve, no u with umlaut, no o with umlaut, no dotless i, no c with cedilla).
+Ornegin: "şehir" yerine "sehir", "güzel" yerine "guzel", "çok" yerine "cok" yaz.
 
-YALNIZCA geçerli bir JSON dizisi döndür — markdown işareti veya ekstra metin olmadan.
-Şema:
+YALNIZCA gecerli bir JSON dizisi dondur — markdown isareti veya ekstra metin olmadan.
+Sema:
 [
   {{
     "format": "Reel | Carousel | Story",
