@@ -533,8 +533,11 @@ def create_pdf(ideas, trending, account, output_path):
 # ---------------------------------------------------------------------------
 
 def process_account(account, drive_service):
-    username = account["username"]
-    print(f"\n--- Processing @{username} ---")
+    username   = account["username"]
+    send_email = account.get("send_email", False)
+    # drive_only accounts (send_email=False) go to Google Drive only
+    # email accounts (send_email=True)  get email only — no Drive
+    print(f"\n--- Processing @{username} ({'email only' if send_email else 'Drive only'}) ---")
 
     print("  Generating content ideas...")
     ideas = generate_ideas(account)
@@ -555,19 +558,21 @@ def process_account(account, drive_service):
     print("  Building PDF...")
     create_pdf(ideas, trending, account, pdf_path)
 
-    print("  Uploading to Google Drive...")
-    root_id    = get_or_create_folder(drive_service, DRIVE_ROOT)
-    user_id    = get_or_create_folder(drive_service, username, parent_id=root_id)
-    date_id    = get_or_create_folder(drive_service, date_str, parent_id=user_id)
-    result     = upload_file(drive_service, pdf_path, date_id)
-    print(f"  Drive: {DRIVE_ROOT}/{username}/{date_str}/{pdf_name}")
-    link = result.get("webViewLink", "")
-    if link:
-        print(f"  View: {link}")
-
-    if account.get("send_email") and account.get("email"):
+    if send_email:
+        # New accounts — email only
         print(f"  Sending email to {account['email']}...")
         send_email_with_pdf(account["email"], pdf_path, account)
+    else:
+        # Owner account (ssefaeksii) — Google Drive only
+        print("  Uploading to Google Drive...")
+        root_id = get_or_create_folder(drive_service, DRIVE_ROOT)
+        user_id = get_or_create_folder(drive_service, username, parent_id=root_id)
+        date_id = get_or_create_folder(drive_service, date_str, parent_id=user_id)
+        result  = upload_file(drive_service, pdf_path, date_id)
+        print(f"  Drive: {DRIVE_ROOT}/{username}/{date_str}/{pdf_name}")
+        link = result.get("webViewLink", "")
+        if link:
+            print(f"  View: {link}")
 
     pdf_path.unlink()
     print(f"  Done: @{username}")
