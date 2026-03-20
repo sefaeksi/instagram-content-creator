@@ -9,5 +9,16 @@
     "content_style": "Motivasyonel, samimi, egitici; BTS rutinler, pratik ipuclari, ozgelisim tavsiyeleri",
     "target_audience": "20-35 yas arasi, kisisel gelisim ve yasam tarzi meraklilari",
     "typical_formats": ["Reel", "Carousel", "Story"]
+  },
+  {
+    "username": "bilalbashan",
+    "email": "bilalbashan@gmail.com",
+    "send_email": true,
+    "niche": "Kosu, Antrenman ve Fit Yasam Tarzi",
+    "language": "Turkish",
+    "bio": "Kosu antrenoru, online kocluuk & ozel ders. @easyrun.club kurucusu. 48K takipci.",
+    "content_style": "Motive edici, pratik ve bilgi dolu; kosu programlari, antrenman ipuclari, fit tarifler ve saglikli yasam tarzi icerikleri",
+    "target_audience": "Kosuya ve spora ilgi duyan, saglikli beslenmek isteyen, online antrenman arayan 20-40 yas arasi Turk kullanicilari",
+    "typical_formats": ["Reel", "Carousel", "Story"]
   }
 ]
