@@ -5,6 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
@@ -121,8 +122,12 @@ Bugunun tarihi: {today}.
 - Marka sesi: Tutarli estetik, samimi ton, rakip analizi
 
 --- GOREV ---
-Tam olarak 3 farkli, yaratici ve uygulanabilir Instagram icerik fikri uret.
-Formatlari mutlaka karistir (her fikir farkli format olmali: Reel, Carousel, Story).
+Tam olarak 5 Instagram icerik fikri uret:
+- Fikir 1: Reel
+- Fikir 2: Carousel
+- Fikir 3: Story
+- Fikir 4: Reel (farkli konu, farkli hook stili)
+- Fikir 5: Reel (farkli konu, farkli hook stili)
 Kisisel gelisim, uretkenlik, saglikli yasam, motivasyon ve yasam tarzi konularina odaklan.
 
 --- DIL KURALI ---
@@ -156,7 +161,35 @@ YALNIZCA gecerli bir JSON dizisi dondur. Markdown fence veya ekstra metin kesinl
     raw = re.sub(r"```$", "", raw).strip()
 
     ideas = json.loads(raw)
-    return ideas[:3]
+    return ideas[:5]
+
+
+def get_trending_topic() -> dict:
+    client = genai.Client(api_key=GEMINI_API_KEY)
+
+    prompt = """Search the web right now for a recently trended Instagram Reel topic in the Lifestyle and Self-Improvement niche.
+Find something that went viral or peaked in popularity in the last few weeks on Instagram.
+
+Return ONLY a valid JSON object — no markdown, no extra text:
+{
+  "topic": "name of the trending topic or challenge",
+  "why_trending": "brief explanation of why it went viral (1-2 sentences, English keyboard chars only, no Turkish special chars)",
+  "peak_period": "when it trended (e.g. 'February 2026')",
+  "niche_adaptation": "how to adapt this trend for a Lifestyle/Self-Improvement account (1-2 sentences, Turkish with English keyboard chars only)",
+  "example_hook": "a ready-to-use hook sentence in Turkish using this trend (English keyboard chars only)"
+}"""
+
+    response = client.models.generate_content(
+        model="models/gemini-2.5-flash",
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            tools=[types.Tool(google_search=types.GoogleSearch())]
+        ),
+    )
+    raw = response.text.strip()
+    raw = re.sub(r"^```(?:json)?", "", raw).strip()
+    raw = re.sub(r"```$", "", raw).strip()
+    return json.loads(raw)
 
 
 # ---------------------------------------------------------------------------
@@ -175,7 +208,12 @@ LIGHT_GRAY  = HexColor("#F9FAFB")
 BORDER      = HexColor("#E5E7EB")
 GREEN       = HexColor("#059669")
 
-ACCENT_COLORS = [PURPLE, PINK, BLUE]
+ORANGE      = HexColor("#D97706")
+ORANGE_DARK = HexColor("#92400E")
+ORANGE_LIGHT= HexColor("#FEF3C7")
+ORANGE_MID  = HexColor("#B45309")
+
+ACCENT_COLORS = [PURPLE, PINK, BLUE, PURPLE, PINK]
 
 
 def _style(name, **kwargs) -> ParagraphStyle:
@@ -184,7 +222,7 @@ def _style(name, **kwargs) -> ParagraphStyle:
     return ParagraphStyle(name, **defaults)
 
 
-def create_pdf(ideas: list[dict], output_path: Path):
+def create_pdf(ideas: list[dict], output_path: Path, trending: dict = None):
     doc = SimpleDocTemplate(
         str(output_path),
         pagesize=A4,
@@ -315,6 +353,68 @@ def create_pdf(ideas: list[dict], output_path: Path):
         story.append(border_tbl)
         story.append(Spacer(1, 0.5 * cm))
 
+    # ── Bonus: Trending Topic ─────────────────────────────────────────────────
+    if trending:
+        s_bonus_title  = _style("BonusTitle", fontName="Helvetica-Bold", fontSize=13, textColor=white)
+        s_bonus_badge  = _style("BonusBadge", fontName="Helvetica-Bold", fontSize=10, textColor=white, alignment=TA_CENTER)
+        s_bonus_topic  = _style("BonusTopic", fontName="Helvetica-Bold", fontSize=14, textColor=ORANGE, leading=18)
+        s_bonus_body   = _style("BonusBody", fontSize=10, textColor=DARK, leading=14)
+        s_bonus_hook   = _style("BonusHook", fontName="Helvetica-Oblique", fontSize=11, textColor=ORANGE_MID, leading=16)
+
+        bonus_header = Table(
+            [[Paragraph("BONUS", s_bonus_title), Paragraph("Trending Topic", s_bonus_badge)]],
+            colWidths=[13 * cm, 4 * cm],
+        )
+        bonus_header.setStyle(TableStyle([
+            ("BACKGROUND",    (0, 0), (-1, -1), ORANGE),
+            ("ALIGN",         (0, 0), (0, 0), "LEFT"),
+            ("ALIGN",         (1, 0), (1, 0), "CENTER"),
+            ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
+            ("TOPPADDING",    (0, 0), (-1, -1), 10),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+            ("LEFTPADDING",   (0, 0), (0, 0), 14),
+            ("RIGHTPADDING",  (1, 0), (1, 0), 10),
+        ]))
+
+        bonus_elements = [
+            Paragraph("TREND KONUSU", s_label),
+            Paragraph(trending.get("topic", ""), s_bonus_topic),
+
+            Paragraph("NEDEN TREND OLDU", s_label),
+            Paragraph(trending.get("why_trending", ""), s_bonus_body),
+
+            Paragraph("TREND DONEMI", s_label),
+            Paragraph(trending.get("peak_period", ""), s_bonus_body),
+
+            Paragraph("NISINE NASIL UYARLANIR", s_label),
+            Paragraph(trending.get("niche_adaptation", ""), s_bonus_body),
+
+            Paragraph("HAZIR HOOK", s_label),
+            Paragraph(f"\u201c{trending.get('example_hook', '')}\u201d", s_bonus_hook),
+        ]
+
+        bonus_inner = Table([[el] for el in bonus_elements], colWidths=[W - 0.8 * cm])
+        bonus_inner.setStyle(TableStyle([
+            ("LEFTPADDING",   (0, 0), (-1, -1), 14),
+            ("RIGHTPADDING",  (0, 0), (-1, -1), 14),
+            ("TOPPADDING",    (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
+        ]))
+
+        bonus_border = Table([[bonus_inner]], colWidths=[W])
+        bonus_border.setStyle(TableStyle([
+            ("BACKGROUND",    (0, 0), (-1, -1), ORANGE_LIGHT),
+            ("BOX",           (0, 0), (-1, -1), 1, ORANGE),
+            ("TOPPADDING",    (0, 0), (-1, -1), 10),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 14),
+            ("LEFTPADDING",   (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING",  (0, 0), (-1, -1), 0),
+        ]))
+
+        story.append(bonus_header)
+        story.append(bonus_border)
+        story.append(Spacer(1, 0.5 * cm))
+
     # ── Footer ───────────────────────────────────────────────────────────────
     story.append(HRFlowable(width="100%", thickness=0.5, color=BORDER))
     story.append(Spacer(1, 0.15 * cm))
@@ -338,10 +438,18 @@ def main():
         print("ERROR: GEMINI_API_KEY not set. Add it to your .env file.")
         return
 
-    # 1. Generate ideas
+    # 1. Generate ideas and trending topic in parallel (sequentially here)
     print("Generating content ideas with Gemini...")
     ideas = generate_ideas()
     print(f"Generated {len(ideas)} ideas.")
+
+    print("Searching for trending topic...")
+    try:
+        trending = get_trending_topic()
+        print(f"Trending topic found: {trending.get('topic', 'N/A')}")
+    except Exception as e:
+        print(f"Could not fetch trending topic: {e}")
+        trending = None
 
     # 2. Create PDF locally
     today = datetime.now()
@@ -350,7 +458,7 @@ def main():
     pdf_path = Path(pdf_name)
 
     print("Building PDF...")
-    create_pdf(ideas, pdf_path)
+    create_pdf(ideas, pdf_path, trending=trending)
     print(f"PDF created: {pdf_name}")
 
     # 3. Upload to Google Drive
