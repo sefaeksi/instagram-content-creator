@@ -178,7 +178,7 @@ Return ONLY a valid JSON object — no markdown, no extra text:
 }}"""
 
     response = client.models.generate_content(
-        model="models/gemini-2.5-flash",
+        model="models/gemini-3-flash-preview",
         contents=prompt,
         config=types.GenerateContentConfig(
             tools=[types.Tool(google_search=types.GoogleSearch())]
@@ -255,7 +255,7 @@ YALNIZCA gecerli bir JSON dizisi dondur. Markdown fence veya ekstra metin kesinl
 ]"""
 
     response = client.models.generate_content(
-        model="models/gemini-2.5-flash",
+        model="models/gemini-3-flash-preview",
         contents=prompt,
     )
     raw = response.text.strip()
@@ -293,7 +293,7 @@ Return ONLY a valid JSON object — no markdown, no extra text:
 }}"""
 
     response = client.models.generate_content(
-        model="models/gemini-2.5-flash",
+        model="models/gemini-3-flash-preview",
         contents=prompt,
         config=types.GenerateContentConfig(
             tools=[types.Tool(google_search=types.GoogleSearch())]
