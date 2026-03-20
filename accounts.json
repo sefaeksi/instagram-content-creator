@@ -11,6 +11,17 @@
     "typical_formats": ["Reel", "Carousel", "Story"]
   },
   {
+    "username": "naremkaya",
+    "email": "naremkyaa@gmail.com",
+    "send_email": true,
+    "niche": "Yasam Tarzi, Makyaj ve Kosan Kiz",
+    "language": "Turkish",
+    "bio": "Yasam tarzi, makyaj ve kosu icerikleri paylasan genc bir kiz",
+    "content_style": "Samimi, estetik ve ilham verici; gunluk rutinler, makyaj tuturyallari, kosu motivasyonu ve fit yasam tarzi icerikleri",
+    "target_audience": "18-30 yas arasi, makyaj, kosu ve yasam tarzi meraklisi genc kadinlar",
+    "typical_formats": ["Reel", "Carousel", "Story"]
+  },
+  {
     "username": "bilalbashan",
     "email": "bilalbashan@gmail.com",
     "send_email": true,
