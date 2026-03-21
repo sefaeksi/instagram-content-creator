@@ -20,7 +20,6 @@ from email.mime.text import MIMEText
 from pathlib import Path
 
 from google import genai
-from google.genai import types
 from dotenv import load_dotenv
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
@@ -154,7 +153,7 @@ def send_email_with_pdf(to_email, pdf_path, account):
     body = (
         f"Merhaba,\n\n"
         f"@{username} hesabiniz icin {date_str} tarihli icerik fikirleri ekte yer almaktadir.\n\n"
-        f"Bugun sizin icin 5 farkli icerik fikri + 1 bonus trend analizi hazirladik.\n\n"
+        f"Bugun sizin icin 5 farkli icerik fikri hazirladik.\n\n"
         f"Basarilar dileriz!\n"
         f"Instagram Content Creator Agent"
     )
@@ -175,39 +174,6 @@ def send_email_with_pdf(to_email, pdf_path, account):
         server.send_message(msg)
 
     print(f"  Email sent to {to_email}")
-
-
-# ---------------------------------------------------------------------------
-# Gemini — Instagram account analysis
-# ---------------------------------------------------------------------------
-
-def analyze_instagram_account(username):
-    client = genai.Client(api_key=GEMINI_API_KEY)
-
-    prompt = f"""Search the web for information about the Instagram account @{username}.
-Find their bio, niche, content style, target audience, and typical post formats.
-
-Return ONLY a valid JSON object — no markdown, no extra text:
-{{
-  "niche": "main content niche (e.g. Fitness, Cooking, Fashion...)",
-  "bio": "short summary of their bio",
-  "content_style": "how they present content (tone, style, themes)",
-  "target_audience": "who follows them (age, interests)",
-  "typical_formats": ["Reel", "Carousel", "Story"],
-  "language": "main language of the account (e.g. Turkish, English)"
-}}"""
-
-    response = client.models.generate_content(
-        model="models/gemini-3-flash-preview",
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            tools=[types.Tool(google_search=types.GoogleSearch())]
-        ),
-    )
-    raw = response.text.strip()
-    raw = re.sub(r"^```(?:json)?", "", raw).strip()
-    raw = re.sub(r"```$", "", raw).strip()
-    return json.loads(raw)
 
 
 # ---------------------------------------------------------------------------
@@ -285,47 +251,6 @@ YALNIZCA gecerli bir JSON dizisi dondur. Markdown fence veya ekstra metin kesinl
 
 
 # ---------------------------------------------------------------------------
-# Gemini — Trending topic (niche-specific)
-# ---------------------------------------------------------------------------
-
-def get_trending_topic(account):
-    client = genai.Client(api_key=GEMINI_API_KEY)
-    niche  = account.get("niche", "Lifestyle & Self-Improvement")
-
-    prompt = f"""Search the web right now for a recently trended Instagram Reel topic specifically in the "{niche}" niche.
-Find something that went viral or peaked in popularity in the last few weeks on Instagram.
-
-LANGUAGE RULE: ALL text fields must be in Turkish BUT using ONLY English keyboard characters.
-No special Turkish chars. Example: 'guzellesmek' not 'guzelleşmek', 'cok' not 'çok'.
-
-Return ONLY a valid JSON object — no markdown, no extra text:
-{{
-  "topic": "trendin adi (Turkce, Ingilizce klavye)",
-  "peak_period": "ne zaman trend oldu",
-  "why_trending": "neden viral oldu — detayli, 2-3 cumle",
-  "platform_stats": "kac video/goruntulenme varsa yaz, yoksa genel populerlik bilgisi",
-  "niche_adaptation": "'{niche}' hesabi bu trendi nasil kullanabilir — somut, 3-4 cumle",
-  "content_angle": "onerilecek icerik acisi veya bakis acisi, 2-3 cumle",
-  "video_tips": ["ipucu 1", "ipucu 2", "ipucu 3"],
-  "recommended_audio": "uygun ses/muzik turu veya spesifik trend sesi",
-  "hashtags": ["#trend1", "#trend2", "#trend3", "#trend4", "#trend5"],
-  "example_hook": "bu trendi kullanan, kullanima hazir hook cumlesi (Ingilizce klavye)"
-}}"""
-
-    response = client.models.generate_content(
-        model="models/gemini-3-flash-preview",
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            tools=[types.Tool(google_search=types.GoogleSearch())]
-        ),
-    )
-    raw = response.text.strip()
-    raw = re.sub(r"^```(?:json)?", "", raw).strip()
-    raw = re.sub(r"```$", "", raw).strip()
-    return json.loads(raw)
-
-
-# ---------------------------------------------------------------------------
 # PDF generation
 # ---------------------------------------------------------------------------
 
@@ -339,11 +264,6 @@ GRAY         = HexColor("#6B7280")
 LIGHT_GRAY   = HexColor("#F9FAFB")
 BORDER       = HexColor("#E5E7EB")
 GREEN        = HexColor("#059669")
-ORANGE       = HexColor("#D97706")
-ORANGE_DARK  = HexColor("#92400E")
-ORANGE_LIGHT = HexColor("#FEF3C7")
-ORANGE_MID   = HexColor("#B45309")
-
 ACCENT_COLORS = [PURPLE, PINK, BLUE, PURPLE, PINK]
 
 
@@ -353,7 +273,7 @@ def _style(name, **kwargs):
     return ParagraphStyle(name, **defaults)
 
 
-def create_pdf(ideas, trending, account, output_path):
+def create_pdf(ideas, account, output_path):
     doc = SimpleDocTemplate(
         str(output_path),
         pagesize=A4,
@@ -375,12 +295,6 @@ def create_pdf(ideas, trending, account, output_path):
     s_hashtag  = _style("HH", fontSize=9, textColor=PURPLE)
     s_cta      = _style("CT", fontName="Helvetica-Bold", fontSize=10, textColor=GREEN)
     s_footer   = _style("FT", fontSize=8, textColor=GRAY, alignment=TA_CENTER)
-
-    s_bonus_title = _style("BT", fontName="Helvetica-Bold", fontSize=13, textColor=white)
-    s_bonus_badge = _style("BB", fontName="Helvetica-Bold", fontSize=10, textColor=white, alignment=TA_CENTER)
-    s_bonus_topic = _style("BTP", fontName="Helvetica-Bold", fontSize=14, textColor=ORANGE, leading=18)
-    s_bonus_body  = _style("BBD", fontSize=10, textColor=DARK, leading=14)
-    s_bonus_hook  = _style("BHK", fontName="Helvetica-Oblique", fontSize=11, textColor=ORANGE_MID, leading=16)
 
     W        = 17 * cm
     today_str = datetime.now().strftime("%A, %d %B %Y")
@@ -471,72 +385,6 @@ def create_pdf(ideas, trending, account, output_path):
         story.append(border_tbl)
         story.append(Spacer(1, 0.5 * cm))
 
-    # ── Bonus: Trending Topic ────────────────────────────────────────────────
-    if trending:
-        video_tips   = trending.get("video_tips", [])
-        tips_text    = "  ".join(f"&bull; {t}" for t in video_tips) if isinstance(video_tips, list) else str(video_tips)
-        hashtags_txt = "  ".join(trending.get("hashtags", [])) if isinstance(trending.get("hashtags"), list) else ""
-
-        bonus_header = Table([[
-            Paragraph("BONUS", s_bonus_title),
-            Paragraph("Trending Topic", s_bonus_badge),
-        ]], colWidths=[13 * cm, 4 * cm])
-        bonus_header.setStyle(TableStyle([
-            ("BACKGROUND",    (0, 0), (-1, -1), ORANGE),
-            ("ALIGN",         (0, 0), (0, 0), "LEFT"),
-            ("ALIGN",         (1, 0), (1, 0), "CENTER"),
-            ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
-            ("TOPPADDING",    (0, 0), (-1, -1), 10),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
-            ("LEFTPADDING",   (0, 0), (0, 0), 14),
-            ("RIGHTPADDING",  (1, 0), (1, 0), 10),
-        ]))
-
-        bonus_elements = [
-            Paragraph("TREND KONUSU", s_label),
-            Paragraph(trending.get("topic", ""), s_bonus_topic),
-            Paragraph("TREND DONEMI", s_label),
-            Paragraph(trending.get("peak_period", ""), s_bonus_body),
-            Paragraph("NEDEN VIRAL OLDU", s_label),
-            Paragraph(trending.get("why_trending", ""), s_bonus_body),
-            Paragraph("PLATFORM ISTATISTIKLERI", s_label),
-            Paragraph(trending.get("platform_stats", ""), s_bonus_body),
-            Paragraph("NISINE NASIL UYARLANIR", s_label),
-            Paragraph(trending.get("niche_adaptation", ""), s_bonus_body),
-            Paragraph("ICERIK ACISI", s_label),
-            Paragraph(trending.get("content_angle", ""), s_bonus_body),
-            Paragraph("VIDEO IPUCLARI", s_label),
-            Paragraph(tips_text, s_bonus_body),
-            Paragraph("ONERILECEK SES / MUZIK", s_label),
-            Paragraph(trending.get("recommended_audio", ""), s_bonus_body),
-            Paragraph("TREND HASHTAG'LER", s_label),
-            Paragraph(hashtags_txt, s_hashtag),
-            Paragraph("HAZIR HOOK", s_label),
-            Paragraph(f"\u201c{trending.get('example_hook', '')}\u201d", s_bonus_hook),
-        ]
-
-        bonus_inner = Table([[el] for el in bonus_elements], colWidths=[W - 0.8 * cm])
-        bonus_inner.setStyle(TableStyle([
-            ("LEFTPADDING",   (0, 0), (-1, -1), 14),
-            ("RIGHTPADDING",  (0, 0), (-1, -1), 14),
-            ("TOPPADDING",    (0, 0), (-1, -1), 0),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
-        ]))
-
-        bonus_border = Table([[bonus_inner]], colWidths=[W])
-        bonus_border.setStyle(TableStyle([
-            ("BACKGROUND",    (0, 0), (-1, -1), ORANGE_LIGHT),
-            ("BOX",           (0, 0), (-1, -1), 1, ORANGE),
-            ("TOPPADDING",    (0, 0), (-1, -1), 10),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 14),
-            ("LEFTPADDING",   (0, 0), (-1, -1), 0),
-            ("RIGHTPADDING",  (0, 0), (-1, -1), 0),
-        ]))
-
-        story.append(bonus_header)
-        story.append(bonus_border)
-        story.append(Spacer(1, 0.5 * cm))
-
     # ── Footer ───────────────────────────────────────────────────────────────
     story.append(HRFlowable(width="100%", thickness=0.5, color=BORDER))
     story.append(Spacer(1, 0.15 * cm))
@@ -559,35 +407,26 @@ def process_account(account, drive_service):
     # email accounts (send_email=True)  get email only — no Drive
     print(f"\n--- Processing @{username} ({'email only' if send_email else 'Drive only'}) ---")
 
+    # One delivery per account per day
+    if already_sent_today(username):
+        print(f"  Skipping — already processed @{username} today.")
+        return
+
     print("  Generating content ideas...")
     ideas = generate_ideas(account)
     print(f"  Generated {len(ideas)} ideas.")
-
-    print("  Searching trending topic...")
-    try:
-        trending = get_trending_topic(account)
-        print(f"  Trending: {trending.get('topic', 'N/A')}")
-    except Exception as e:
-        print(f"  Trending search failed: {e}")
-        trending = None
 
     date_str = datetime.now().strftime("%Y-%m-%d")
     pdf_name = f"content-ideas-{date_str}.pdf"
     pdf_path = Path(pdf_name)
 
     print("  Building PDF...")
-    create_pdf(ideas, trending, account, pdf_path)
+    create_pdf(ideas, account, pdf_path)
 
     if send_email:
-        # New accounts — email only
-        if already_sent_today(username):
-            print(f"  Skipping email — already sent to @{username} today.")
-        else:
-            print(f"  Sending email to {account['email']}...")
-            send_email_with_pdf(account["email"], pdf_path, account)
-            mark_sent_today(username)
+        print(f"  Sending email to {account['email']}...")
+        send_email_with_pdf(account["email"], pdf_path, account)
     else:
-        # Owner account (ssefaeksii) — Google Drive only
         print("  Uploading to Google Drive...")
         root_id = get_or_create_folder(drive_service, DRIVE_ROOT)
         user_id = get_or_create_folder(drive_service, username, parent_id=root_id)
@@ -598,6 +437,7 @@ def process_account(account, drive_service):
         if link:
             print(f"  View: {link}")
 
+    mark_sent_today(username)
     pdf_path.unlink()
     print(f"  Done: @{username}")
 
