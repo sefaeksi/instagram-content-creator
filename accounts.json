@@ -31,5 +31,16 @@
     "content_style": "Motive edici, pratik ve bilgi dolu; kosu programlari, antrenman ipuclari, fit tarifler ve saglikli yasam tarzi icerikleri",
     "target_audience": "Kosuya ve spora ilgi duyan, saglikli beslenmek isteyen, online antrenman arayan 20-40 yas arasi Turk kullanicilari",
     "typical_formats": ["Reel", "Carousel", "Story"]
+  },
+  {
+    "username": "photofrendos",
+    "email": "arda.ag64@gmail.com",
+    "send_email": true,
+    "niche": "Spor Portre ve Yasam Tarzi Fotografciligi",
+    "language": "Turkish",
+    "bio": "Spor portre ve yasam tarzi fotograflari ceken kisisel fotograf hesabi",
+    "content_style": "Estetik ve etkileyici; spor anlari, portre fotograflari ve gunluk yasam tarzi gorsel icerikleri",
+    "target_audience": "18-35 yas arasi, fotograf, spor ve yasam tarzi meraklisi kullanicilari",
+    "typical_formats": ["Carousel", "Reel", "Story"]
   }
 ]
