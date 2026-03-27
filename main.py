@@ -40,6 +40,7 @@ load_dotenv()
 GEMINI_API_KEY   = os.getenv("GEMINI_API_KEY")
 GMAIL_SENDER     = os.getenv("GMAIL_SENDER", "sefaeksi9@gmail.com")
 GMAIL_PASSWORD   = os.getenv("GMAIL_APP_PASSWORD")
+TARGET_USERNAME  = os.getenv("TARGET_USERNAME", "").strip()
 DRIVE_ROOT       = "Instagram Content Ideas"
 SCOPES           = ["https://www.googleapis.com/auth/drive"]
 ACCOUNTS_FILE    = Path(__file__).parent / "accounts.json"
@@ -454,6 +455,12 @@ def main():
         return
 
     accounts = load_accounts()
+    if TARGET_USERNAME:
+        accounts = [a for a in accounts if a["username"] == TARGET_USERNAME]
+        if not accounts:
+            print(f"ERROR: No account found with username '{TARGET_USERNAME}'")
+            return
+        print(f"Targeting specific account: @{TARGET_USERNAME}")
     print(f"Loaded {len(accounts)} account(s): {[a['username'] for a in accounts]}")
 
     print("Connecting to Google Drive...")
