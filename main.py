@@ -37,14 +37,21 @@ from googleapiclient.http import MediaFileUpload
 
 load_dotenv()
 
-GEMINI_API_KEY   = os.getenv("GEMINI_API_KEY")
-GMAIL_SENDER     = os.getenv("GMAIL_SENDER", "sefaeksi9@gmail.com")
-GMAIL_PASSWORD   = os.getenv("GMAIL_APP_PASSWORD")
-TARGET_USERNAME  = os.getenv("TARGET_USERNAME", "").strip()
-DRIVE_ROOT       = "Instagram Content Ideas"
-SCOPES           = ["https://www.googleapis.com/auth/drive"]
-ACCOUNTS_FILE    = Path(__file__).parent / "accounts.json"
-SENT_LOG_FILE    = Path(__file__).parent / "sent_log.json"
+GEMINI_API_KEY       = os.getenv("GEMINI_API_KEY")
+GMAIL_SENDER         = os.getenv("GMAIL_SENDER", "sefaeksi9@gmail.com")
+GMAIL_PASSWORD       = os.getenv("GMAIL_APP_PASSWORD")
+TARGET_USERNAME      = os.getenv("TARGET_USERNAME", "").strip()
+DRIVE_ROOT           = "Instagram Content Ideas"
+SCOPES               = ["https://www.googleapis.com/auth/drive"]
+ACCOUNTS_FILE        = Path(__file__).parent / "accounts.json"
+SENT_LOG_FILE        = Path(__file__).parent / "sent_log.json"
+CONTENT_CREATOR_FILE = Path(__file__).parent / "content-creator.md"
+
+
+def load_creator_context():
+    if CONTENT_CREATOR_FILE.exists():
+        return CONTENT_CREATOR_FILE.read_text(encoding="utf-8")
+    return ""
 
 # ---------------------------------------------------------------------------
 # Accounts
@@ -185,10 +192,11 @@ def generate_ideas(account):
     client = genai.Client(api_key=GEMINI_API_KEY)
     today  = datetime.now().strftime("%d %B %Y, %A")
 
-    niche          = account.get("niche", "Lifestyle & Self-Improvement")
-    content_style  = account.get("content_style", "motivasyonel, egitici")
-    target_audience= account.get("target_audience", "genel kitle")
-    language       = account.get("language", "Turkish")
+    niche           = account.get("niche", "Lifestyle & Self-Improvement")
+    content_style   = account.get("content_style", "motivasyonel, egitici")
+    target_audience = account.get("target_audience", "genel kitle")
+    language        = account.get("language", "Turkish")
+    creator_context = load_creator_context()
 
     lang_rule = (
         "Tum icerikler Turkce olmali FAKAT SADECE Ingilizce klavye karakterleri kullan. "
@@ -196,6 +204,11 @@ def generate_ideas(account):
         "Ornek: 'guzellesmek', 'olusturmak', 'cok', 'sehir', 'gercek', 'icerik'"
         if language.lower() in ("turkish", "turkce")
         else f"Write all content in {language}."
+    )
+
+    creator_section = (
+        f"\n--- HESAP KARAKTERI VE STRATEJI ---\n{creator_context}\n"
+        if creator_context else ""
     )
 
     prompt = f"""Sen @{account['username']} hesabina ozel icerik uretiyorsun.
@@ -206,7 +219,7 @@ Hesap bilgileri:
 - Hedef kitle: {target_audience}
 
 Bugunun tarihi: {today}.
-
+{creator_section}
 --- YETENEKLERIN ---
 - Reels: Ilk 3 saniyede dikkati kacirmayan hook'lar, trend uyarlamasi, izlenme suresi ve paylasimi maksimize eden senaryo
 - Carousel: Kaydetmeyi ve paylasmayi tetikleyen egitici kaydirmali icerik; gorsel hiyerarsiye dikkat
@@ -215,13 +228,12 @@ Bugunun tarihi: {today}.
 - Marka sesi: Tutarli estetik, samimi ton, {niche} nisine uygun rakip analizi
 
 --- GOREV ---
-Bu hesaba ve nisine OZEL tam olarak 5 icerik fikri uret:
+Bu hesaba ve nisine OZEL tam olarak 5 icerik fikri uret. Icerik sutuinlarindan (75 HARD, rutin, kisisel gelisim, lifestyle estetik, samimi anlar) ilham al ve gunun tarihi ile haftanin gununu dikkate alarak en uygun formatlari sec:
 - Fikir 1: Reel
 - Fikir 2: Carousel
 - Fikir 3: Story
 - Fikir 4: Reel (farkli konu, farkli hook stili)
 - Fikir 5: Reel (farkli konu, farkli hook stili)
-Fikirlerin hepsi {niche} nisine ve bu hesabin kitlesine uygun olmali.
 
 --- DIL KURALI ---
 {lang_rule}

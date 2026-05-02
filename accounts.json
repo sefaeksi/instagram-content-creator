@@ -9,38 +9,5 @@
     "content_style": "Motivasyonel, samimi, egitici; BTS rutinler, pratik ipuclari, ozgelisim tavsiyeleri",
     "target_audience": "20-35 yas arasi, kisisel gelisim ve yasam tarzi meraklilari",
     "typical_formats": ["Reel", "Carousel", "Story"]
-  },
-  {
-    "username": "naremkaya",
-    "email": "naremkyaa@gmail.com",
-    "send_email": true,
-    "niche": "Yasam Tarzi, Makyaj ve Kosan Kiz",
-    "language": "Turkish",
-    "bio": "Yasam tarzi, makyaj ve kosu icerikleri paylasan genc bir kiz",
-    "content_style": "Samimi, estetik ve ilham verici; gunluk rutinler, makyaj tuturyallari, kosu motivasyonu ve fit yasam tarzi icerikleri",
-    "target_audience": "18-30 yas arasi, makyaj, kosu ve yasam tarzi meraklisi genc kadinlar",
-    "typical_formats": ["Reel", "Carousel", "Story"]
-  },
-  {
-    "username": "bilalbashan",
-    "email": "bilalbashan@gmail.com",
-    "send_email": true,
-    "niche": "Kosu, Antrenman ve Fit Yasam Tarzi",
-    "language": "Turkish",
-    "bio": "Kosu antrenoru, online kocluuk & ozel ders. @easyrun.club kurucusu. 48K takipci.",
-    "content_style": "Motive edici, pratik ve bilgi dolu; kosu programlari, antrenman ipuclari, fit tarifler ve saglikli yasam tarzi icerikleri",
-    "target_audience": "Kosuya ve spora ilgi duyan, saglikli beslenmek isteyen, online antrenman arayan 20-40 yas arasi Turk kullanicilari",
-    "typical_formats": ["Reel", "Carousel", "Story"]
-  },
-  {
-    "username": "photofrendos",
-    "email": "arda.ag64@gmail.com",
-    "send_email": true,
-    "niche": "Spor Portre ve Yasam Tarzi Fotografciligi",
-    "language": "Turkish",
-    "bio": "Spor portre ve yasam tarzi fotograflari ceken kisisel fotograf hesabi",
-    "content_style": "Estetik ve etkileyici; spor anlari, portre fotograflari ve gunluk yasam tarzi gorsel icerikleri",
-    "target_audience": "18-35 yas arasi, fotograf, spor ve yasam tarzi meraklisi kullanicilari",
-    "typical_formats": ["Carousel", "Reel", "Story"]
   }
 ]
