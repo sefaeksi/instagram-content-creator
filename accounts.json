@@ -8,6 +8,7 @@
     "bio": "Kisisel gelisim, uretkenlik ve yasam tarzi icerikleri",
     "content_style": "Motivasyonel, samimi, egitici; BTS rutinler, pratik ipuclari, ozgelisim tavsiyeleri",
     "target_audience": "20-35 yas arasi, kisisel gelisim ve yasam tarzi meraklilari",
-    "typical_formats": ["Reel", "Carousel", "Story"]
+    "typical_formats": ["Reel", "Carousel", "Story"],
+    "hard75_start_date": null
   }
 ]

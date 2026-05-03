@@ -11,8 +11,9 @@ Instagram Content Idea Generator
 import os
 import json
 import re
+import sys
 import smtplib
-from datetime import datetime
+from datetime import datetime, date
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
@@ -29,6 +30,8 @@ from reportlab.lib.enums import TA_CENTER
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, HRFlowable, Table, TableStyle
 )
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -36,6 +39,14 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
 load_dotenv()
+
+_FONTS = Path("C:/Windows/Fonts")
+pdfmetrics.registerFont(TTFont("Arial",           str(_FONTS / "arial.ttf")))
+pdfmetrics.registerFont(TTFont("Arial-Bold",      str(_FONTS / "arialbd.ttf")))
+pdfmetrics.registerFont(TTFont("Arial-Italic",    str(_FONTS / "ariali.ttf")))
+pdfmetrics.registerFont(TTFont("Arial-BoldItalic",str(_FONTS / "arialbi.ttf")))
+pdfmetrics.registerFontFamily("Arial", normal="Arial", bold="Arial-Bold",
+                               italic="Arial-Italic", boldItalic="Arial-BoldItalic")
 
 GEMINI_API_KEY       = os.getenv("GEMINI_API_KEY")
 GMAIL_SENDER         = os.getenv("GMAIL_SENDER", "sefaeksi9@gmail.com")
@@ -46,6 +57,32 @@ SCOPES               = ["https://www.googleapis.com/auth/drive"]
 ACCOUNTS_FILE        = Path(__file__).parent / "accounts.json"
 SENT_LOG_FILE        = Path(__file__).parent / "sent_log.json"
 CONTENT_CREATOR_FILE = Path(__file__).parent / "content-creator.md"
+
+
+def get_hard75_day(account):
+    start = account.get("hard75_start_date")
+    if not start:
+        return None
+    start_date = datetime.strptime(start, "%Y-%m-%d").date()
+    today = datetime.now().date()
+    day = (today - start_date).days + 1
+    return day if 1 <= day <= 75 else None
+
+
+def start_hard75(username):
+    accounts = load_accounts()
+    found = False
+    for account in accounts:
+        if account["username"] == username:
+            account["hard75_start_date"] = datetime.now().strftime("%Y-%m-%d")
+            found = True
+            break
+    if not found:
+        print(f"ERROR: Account @{username} not found.")
+        return
+    with open(ACCOUNTS_FILE, "w", encoding="utf-8") as f:
+        json.dump(accounts, f, indent=2, ensure_ascii=False)
+    print(f"75 HARD started for @{username} — Day 1 begins today!")
 
 
 def load_creator_context():
@@ -197,6 +234,7 @@ def generate_ideas(account):
     target_audience = account.get("target_audience", "genel kitle")
     language        = account.get("language", "Turkish")
     creator_context = load_creator_context()
+    hard75_day      = get_hard75_day(account)
 
     lang_rule = (
         "Tum icerikler Turkce olmali FAKAT SADECE Ingilizce klavye karakterleri kullan. "
@@ -211,6 +249,23 @@ def generate_ideas(account):
         if creator_context else ""
     )
 
+    if hard75_day:
+        hard75_section = (
+            f"\n--- 75 HARD CHALLENGE ---\n"
+            f"Kullanici bugun 75 HARD'in {hard75_day}. gununde. "
+            f"Bu bilgiyi iceriklere dogal sekilde entegre et. "
+            f"Gun sayisina gore ton: "
+            f"1-10. gunler = yeni baslamis, heyecanli; "
+            f"11-30. gunler = momentum kazaniyor, zorluklarla basa cikiyor; "
+            f"31-50. gunler = disiplin oturuyor, zihinsel dayaniklilik; "
+            f"51-75. gunler = bitis yaklasıyor, efsane olma anlatisi. "
+            f"Bugun {hard75_day}. gun — buna uygun bir 75 HARD icerigi zorunlu olarak ekle.\n"
+        )
+        hard75_task = f"- Fikir 1: Reel (75 HARD — {hard75_day}. gun icerigi, bu gun sayisina ozgu deneyim ve ton)"
+    else:
+        hard75_section = ""
+        hard75_task = "- Fikir 1: Reel"
+
     prompt = f"""Sen @{account['username']} hesabina ozel icerik uretiyorsun.
 
 Hesap bilgileri:
@@ -219,7 +274,7 @@ Hesap bilgileri:
 - Hedef kitle: {target_audience}
 
 Bugunun tarihi: {today}.
-{creator_section}
+{creator_section}{hard75_section}
 --- YETENEKLERIN ---
 - Reels: Ilk 3 saniyede dikkati kacirmayan hook'lar, trend uyarlamasi, izlenme suresi ve paylasimi maksimize eden senaryo
 - Carousel: Kaydetmeyi ve paylasmayi tetikleyen egitici kaydirmali icerik; gorsel hiyerarsiye dikkat
@@ -228,8 +283,8 @@ Bugunun tarihi: {today}.
 - Marka sesi: Tutarli estetik, samimi ton, {niche} nisine uygun rakip analizi
 
 --- GOREV ---
-Bu hesaba ve nisine OZEL tam olarak 5 icerik fikri uret. Icerik sutuinlarindan (75 HARD, rutin, kisisel gelisim, lifestyle estetik, samimi anlar) ilham al ve gunun tarihi ile haftanin gununu dikkate alarak en uygun formatlari sec:
-- Fikir 1: Reel
+Bu hesaba ve nisine OZEL tam olarak 5 icerik fikri uret. Gunun tarihi ile haftanin gununu dikkate al:
+{hard75_task}
 - Fikir 2: Carousel
 - Fikir 3: Story
 - Fikir 4: Reel (farkli konu, farkli hook stili)
@@ -254,7 +309,7 @@ YALNIZCA gecerli bir JSON dizisi dondur. Markdown fence veya ekstra metin kesinl
 ]"""
 
     response = client.models.generate_content(
-        model="models/gemini-3-flash-preview",
+        model="gemini-2.5-flash",
         contents=prompt,
     )
     raw = response.text.strip()
@@ -281,7 +336,7 @@ ACCENT_COLORS = [PURPLE, PINK, BLUE, PURPLE, PINK]
 
 
 def _style(name, **kwargs):
-    defaults = dict(fontName="Helvetica", fontSize=10, textColor=DARK, leading=14)
+    defaults = dict(fontName="Arial", fontSize=10, textColor=DARK, leading=14)
     defaults.update(kwargs)
     return ParagraphStyle(name, **defaults)
 
@@ -294,36 +349,38 @@ def create_pdf(ideas, account, output_path):
         topMargin=2 * cm,   bottomMargin=2 * cm,
     )
 
-    s_header_title = _style("HT", fontName="Helvetica-Bold", fontSize=18, textColor=white, alignment=TA_CENTER, leading=24)
-    s_header_user  = _style("HU", fontName="Helvetica-Bold", fontSize=12, textColor=HexColor("#DDD6FE"), alignment=TA_CENTER)
-    s_header_sub   = _style("HS", fontSize=10, textColor=HexColor("#C4B5FD"), alignment=TA_CENTER)
-    s_header_date  = _style("HD", fontSize=9,  textColor=HexColor("#A78BFA"), alignment=TA_CENTER)
+    s_header_title  = _style("HT", fontName="Arial-Bold", fontSize=18, textColor=white, alignment=TA_CENTER, leading=24)
+    s_header_user   = _style("HU", fontName="Arial-Bold", fontSize=12, textColor=HexColor("#DDD6FE"), alignment=TA_CENTER)
+    s_header_sub    = _style("HS", fontSize=10, textColor=HexColor("#C4B5FD"), alignment=TA_CENTER)
+    s_header_date   = _style("HD", fontSize=9,  textColor=HexColor("#A78BFA"), alignment=TA_CENTER)
+    s_header_hard75 = _style("H7", fontName="Arial-Bold", fontSize=11, textColor=HexColor("#FCD34D"), alignment=TA_CENTER)
 
-    s_idea_num = _style("IN", fontName="Helvetica-Bold", fontSize=13, textColor=white)
-    s_badge    = _style("IB", fontName="Helvetica-Bold", fontSize=10, textColor=white, alignment=TA_CENTER)
-    s_label    = _style("LB", fontName="Helvetica-Bold", fontSize=8, textColor=GRAY, spaceBefore=6, spaceAfter=2)
-    s_title    = _style("TT", fontName="Helvetica-Bold", fontSize=12, textColor=DARK, leading=16)
-    s_hook     = _style("HK", fontName="Helvetica-Oblique", fontSize=11, textColor=PURPLE, leading=16)
+    s_idea_num = _style("IN", fontName="Arial-Bold", fontSize=13, textColor=white)
+    s_badge    = _style("IB", fontName="Arial-Bold", fontSize=10, textColor=white, alignment=TA_CENTER)
+    s_label    = _style("LB", fontName="Arial-Bold", fontSize=8, textColor=GRAY, spaceBefore=6, spaceAfter=2)
+    s_title    = _style("TT", fontName="Arial-Bold", fontSize=12, textColor=DARK, leading=16)
+    s_hook     = _style("HK", fontName="Arial-Italic", fontSize=11, textColor=PURPLE, leading=16)
     s_body     = _style("BD", fontSize=10, textColor=DARK, leading=14)
     s_hashtag  = _style("HH", fontSize=9, textColor=PURPLE)
-    s_cta      = _style("CT", fontName="Helvetica-Bold", fontSize=10, textColor=GREEN)
+    s_cta      = _style("CT", fontName="Arial-Bold", fontSize=10, textColor=GREEN)
     s_footer   = _style("FT", fontSize=8, textColor=GRAY, alignment=TA_CENTER)
 
-    W        = 17 * cm
+    W         = 17 * cm
     today_str = datetime.now().strftime("%A, %d %B %Y")
     niche     = account.get("niche", "")
     username  = account.get("username", "")
+    hard75_day = get_hard75_day(account)
 
     story = []
 
     # ── Header ──────────────────────────────────────────────────────────────
-    header_tbl = Table([
+    header_rows = [
         [Paragraph("Instagram Content Ideas", s_header_title)],
         [Paragraph(f"@{username}", s_header_user)],
         [Paragraph(niche, s_header_sub)],
         [Paragraph(today_str, s_header_date)],
-    ], colWidths=[W])
-    header_tbl.setStyle(TableStyle([
+    ]
+    header_styles = [
         ("BACKGROUND",    (0, 0), (-1, 0), PURPLE),
         ("BACKGROUND",    (0, 1), (-1, 1), PURPLE_MID),
         ("BACKGROUND",    (0, 2), (-1, 2), PURPLE_DARK),
@@ -337,8 +394,20 @@ def create_pdf(ideas, account, output_path):
         ("TOPPADDING",    (0, 2), (0, 2), 4),
         ("BOTTOMPADDING", (0, 2), (0, 2), 4),
         ("TOPPADDING",    (0, 3), (0, 3), 4),
-        ("BOTTOMPADDING", (0, 3), (0, 3), 12),
-    ]))
+        ("BOTTOMPADDING", (0, 3), (0, 3), 4 if hard75_day else 12),
+    ]
+    if hard75_day:
+        header_rows.append(
+            [Paragraph(f"75 HARD — Gun {hard75_day} / 75", s_header_hard75)]
+        )
+        header_styles += [
+            ("BACKGROUND",    (0, 4), (-1, 4), HexColor("#78350F")),
+            ("TOPPADDING",    (0, 4), (0, 4), 6),
+            ("BOTTOMPADDING", (0, 4), (0, 4), 10),
+        ]
+
+    header_tbl = Table(header_rows, colWidths=[W])
+    header_tbl.setStyle(TableStyle(header_styles))
     story.append(header_tbl)
     story.append(Spacer(1, 0.6 * cm))
 
@@ -490,4 +559,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) == 3 and sys.argv[1] == "--start-hard75":
+        start_hard75(sys.argv[2])
+    else:
+        main()
