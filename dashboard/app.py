@@ -121,6 +121,34 @@ def api_explore():
         return jsonify({"ok": False, "error": str(e)}), 500
 
 
+@app.route("/api/explore/saved", methods=["GET"])
+def api_explore_saved():
+    from db import _kv_get, _use_kv
+    try:
+        if _use_kv():
+            data = _kv_get("explore:current")
+            if data and isinstance(data, dict):
+                return jsonify({"ok": True, "result": data.get("result"), "saved_at": data.get("saved_at")})
+        return jsonify({"ok": True, "result": None})
+    except Exception:
+        return jsonify({"ok": True, "result": None})
+
+
+@app.route("/api/explore/save", methods=["POST"])
+def api_explore_save():
+    from db import _kv_set, _use_kv
+    try:
+        result = request.get_json(force=True)
+        if _use_kv():
+            _kv_set("explore:current", {
+                "result": result,
+                "saved_at": datetime.now().isoformat(),
+            })
+        return jsonify({"ok": True})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
 @app.route("/api/export/advisor", methods=["POST"])
 def api_export_advisor():
     try:
