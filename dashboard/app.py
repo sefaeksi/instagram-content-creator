@@ -2,10 +2,12 @@ import sys
 import json
 import time
 import io
+import os
+import functools
 from pathlib import Path
 from datetime import datetime
 
-from flask import Flask, jsonify, render_template, request, send_file
+from flask import Flask, jsonify, render_template, request, send_file, Response
 from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).parent.parent / ".env")
@@ -18,6 +20,40 @@ from explore     import generate_explore_plan
 from pdf_export  import build_advisor_pdf, build_explore_pdf
 
 app = Flask(__name__)
+
+
+def _check_auth(username, password):
+    correct_user = os.getenv("DASHBOARD_USER", "admin")
+    correct_pass = os.getenv("DASHBOARD_PASS", "")
+    return username == correct_user and password == correct_pass and correct_pass != ""
+
+
+def require_auth(f):
+    @functools.wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not _check_auth(auth.username, auth.password):
+            return Response(
+                "Giris yapmaniz gerekiyor.",
+                401,
+                {"WWW-Authenticate": 'Basic realm="Instagram Dashboard"'},
+            )
+        return f(*args, **kwargs)
+    return decorated
+
+
+app.before_request_funcs.setdefault(None, [])
+
+
+@app.before_request
+def protect():
+    auth = request.authorization
+    if not auth or not _check_auth(auth.username, auth.password):
+        return Response(
+            "Giris yapmaniz gerekiyor.",
+            401,
+            {"WWW-Authenticate": 'Basic realm="Instagram Dashboard"'},
+        )
 
 # ── Simple in-memory cache (1 hour) ─────────────────────────────────────────
 _cache: dict = {}
