@@ -44,6 +44,20 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/api/debug")
+def api_debug():
+    import os
+    token   = os.getenv("INSTAGRAM_ACCESS_TOKEN", "")
+    user_id = os.getenv("INSTAGRAM_USER_ID", "")
+    return jsonify({
+        "token_len":   len(token),
+        "token_start": token[:10] if token else "",
+        "user_id":     user_id,
+        "has_token":   bool(token),
+        "has_user_id": bool(user_id),
+    })
+
+
 @app.route("/api/stats")
 def api_stats():
     try:
