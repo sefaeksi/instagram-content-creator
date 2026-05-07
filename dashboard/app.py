@@ -76,7 +76,8 @@ def api_stats():
         growth  = get_growth_history(days=60)
         return jsonify({"ok": True, "summary": summary, "weekly_delta": delta, "growth": growth})
     except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
+        import traceback
+        return jsonify({"ok": False, "error": str(e), "trace": traceback.format_exc()}), 500
 
 
 @app.route("/api/refresh", methods=["POST"])
