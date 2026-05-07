@@ -259,6 +259,79 @@
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── Solo Leveling ── */
+  .solo-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
+  .solo-week-label { font-size:18px; font-weight:800; color:var(--text); }
+  .solo-streak { font-size:12px; color:#a78bfa; margin-top:4px; }
+  .solo-nav-btn { padding:7px 14px; background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:12px; cursor:pointer; }
+  .solo-nav-btn:hover { border-color:#7c3aed; color:#a78bfa; }
+  .solo-today-btn { background:linear-gradient(135deg,#7c3aed,#db2777); border:none; color:#fff; font-weight:700; }
+
+  .solo-progress-wrap { display:flex; align-items:center; gap:14px; margin-bottom:24px; }
+  .solo-progress-bar { flex:1; height:10px; background:var(--border); border-radius:99px; overflow:hidden; }
+  .solo-progress-fill { height:100%; background:linear-gradient(90deg,#7c3aed,#db2777); border-radius:99px; transition:width .4s; }
+  .solo-progress-label { font-size:12px; color:var(--muted); white-space:nowrap; }
+
+  .solo-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+  .solo-card-wide { grid-column:1/-1; }
+  @media(max-width:700px){ .solo-grid { grid-template-columns:1fr; } }
+
+  .solo-card { background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  .solo-card-header { display:flex; align-items:center; gap:14px; padding:16px; }
+  .solo-card-icon { font-size:22px; }
+  .solo-card-title { font-weight:700; font-size:14px; color:#fff; }
+  .solo-card-sub { font-size:11px; color:rgba(255,255,255,.7); margin-top:2px; }
+  .solo-card-badge { margin-left:auto; background:rgba(0,0,0,.25); color:#fff; font-weight:700; font-size:12px; padding:4px 10px; border-radius:99px; white-space:nowrap; }
+  .solo-card-badge.done { background:#059669; }
+  .solo-card-badge.skip { background:#6b7280; }
+
+  .solo-card-body { padding:14px; }
+  .solo-check-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+  .solo-check-btn { padding:7px 14px; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font-size:12px; cursor:pointer; transition:all .15s; }
+  .solo-check-btn:hover { border-color:#7c3aed; color:#a78bfa; }
+  .solo-check-btn.active-done { background:#059669; border-color:#059669; color:#fff; font-weight:700; }
+  .solo-check-btn.active-skip { background:#4b5563; border-color:#4b5563; color:#fff; }
+  .solo-skip-btn:hover { border-color:#6b7280; }
+  .solo-reset-btn:hover { border-color:#f59e0b; color:#f59e0b; }
+
+  .solo-note-wrap { display:flex; gap:8px; }
+  .solo-note-input { flex:1; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:7px 10px; color:var(--text); font-size:12px; }
+  .solo-note-input:focus { outline:none; border-color:#7c3aed; }
+  .solo-note-save { padding:7px 14px; background:#7c3aed; border:none; border-radius:8px; color:#fff; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; }
+  .solo-note-save:hover { opacity:.85; }
+
+  .solo-reel-slots { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+  .solo-reel-slot { display:flex; align-items:center; gap:6px; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:6px 10px; font-size:12px; }
+  .solo-reel-slot.done { border-color:#059669; color:#34d399; }
+  .solo-reel-slot.skip { border-color:#4b5563; color:#9ca3af; }
+  .solo-reel-slot select { background:transparent; border:none; color:inherit; font-size:11px; cursor:pointer; }
+  .solo-reel-slot input { background:transparent; border:none; color:var(--text); font-size:11px; width:120px; }
+  .solo-reel-slot input:focus { outline:none; }
+  .solo-reel-remove { background:none; border:none; color:#6b7280; cursor:pointer; font-size:14px; padding:0 2px; }
+  .solo-reel-remove:hover { color:#ef4444; }
+  .solo-add-reel-btn { padding:7px 14px; background:var(--bg); border:1px dashed #db2777; border-radius:8px; color:#db2777; font-size:12px; cursor:pointer; }
+  .solo-add-reel-btn:hover { background:rgba(219,39,119,.1); }
+
+  .solo-story-days { display:flex; flex-wrap:wrap; gap:8px; }
+  .solo-story-day { display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; }
+  .solo-story-dot { width:42px; height:42px; border-radius:50%; border:2px solid var(--border); background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:16px; transition:all .15s; }
+  .solo-story-dot:hover { border-color:#059669; }
+  .solo-story-dot.done { background:#059669; border-color:#059669; }
+  .solo-story-dot.skip { background:#374151; border-color:#4b5563; }
+  .solo-story-day-label { font-size:10px; color:var(--muted); }
+
+  .solo-notes-box, .solo-history-box { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px; margin-bottom:16px; }
+  .solo-notes-title { font-weight:700; font-size:13px; margin-bottom:12px; color:var(--text); }
+  .solo-notes-textarea { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px; color:var(--text); font-size:13px; min-height:80px; resize:vertical; box-sizing:border-box; }
+  .solo-notes-textarea:focus { outline:none; border-color:#7c3aed; }
+
+  .solo-history-row { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); font-size:13px; }
+  .solo-history-row:last-child { border-bottom:none; }
+  .solo-history-week { color:var(--muted); min-width:120px; }
+  .solo-history-bar { flex:1; height:8px; background:var(--border); border-radius:99px; overflow:hidden; }
+  .solo-history-fill { height:100%; background:linear-gradient(90deg,#7c3aed,#db2777); border-radius:99px; }
+  .solo-history-score { font-weight:700; color:#a78bfa; min-width:50px; text-align:right; }
 </style>
 </head>
 <body>
@@ -277,6 +350,7 @@
       <div class="nav-item" data-tab="content"><span class="icon">🎬</span> İçerik Analizi</div>
       <div class="nav-item" data-tab="ai"><span class="icon">🤖</span> AI Danışman</div>
       <div class="nav-item" data-tab="explore"><span class="icon">🔍</span> Keşfet & Plan</div>
+      <div class="nav-item" data-tab="solo"><span class="icon">⚡</span> Solo Leveling</div>
     </nav>
     <div class="sidebar-footer">
       <button class="refresh-btn" id="refreshBtn">↻ Yenile</button>
@@ -391,6 +465,123 @@
       </div>
     </div>
 
+    <!-- SOLO LEVELING TAB -->
+    <div class="tab-panel" id="tab-solo">
+      <div class="solo-header">
+        <div>
+          <div class="solo-week-label" id="soloWeekLabel">Hafta yükleniyor...</div>
+          <div class="solo-streak" id="soloStreak"></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <button class="solo-nav-btn" id="soloPrevWeek">‹ Önceki</button>
+          <button class="solo-nav-btn" id="soloNextWeek">Sonraki ›</button>
+          <button class="solo-nav-btn solo-today-btn" id="soloThisWeek">Bu Hafta</button>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="solo-progress-wrap">
+        <div class="solo-progress-bar"><div class="solo-progress-fill" id="soloProgressFill"></div></div>
+        <div class="solo-progress-label" id="soloProgressLabel">0 / 7 hedef</div>
+      </div>
+
+      <!-- Content grid -->
+      <div class="solo-grid">
+
+        <!-- Carousel: Haftalık Dump -->
+        <div class="solo-card" id="card-carousel-dump">
+          <div class="solo-card-header" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">
+            <div class="solo-card-icon">🗂️</div>
+            <div>
+              <div class="solo-card-title">Haftalık Dump</div>
+              <div class="solo-card-sub">Carousel • Haftada 1</div>
+            </div>
+            <div class="solo-card-badge" id="badge-carousel-dump">—</div>
+          </div>
+          <div class="solo-card-body">
+            <div class="solo-check-row">
+              <button class="solo-check-btn" data-key="carousel-dump" data-val="done">✓ Paylaşıldı</button>
+              <button class="solo-check-btn solo-skip-btn" data-key="carousel-dump" data-val="skip">✕ Atlandı</button>
+              <button class="solo-check-btn solo-reset-btn" data-key="carousel-dump" data-val="none">↺ Sıfırla</button>
+            </div>
+            <div class="solo-note-wrap">
+              <input class="solo-note-input" data-key="carousel-dump" placeholder="Not ekle (konu, tarih...)" />
+              <button class="solo-note-save" data-key="carousel-dump">Kaydet</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Carousel: Bilgi/Hayat -->
+        <div class="solo-card" id="card-carousel-info">
+          <div class="solo-card-header" style="background:linear-gradient(135deg,#0284c7,#38bdf8)">
+            <div class="solo-card-icon">📖</div>
+            <div>
+              <div class="solo-card-title">Bilgi / Hayat Carousel</div>
+              <div class="solo-card-sub">Carousel • Haftada 1</div>
+            </div>
+            <div class="solo-card-badge" id="badge-carousel-info">—</div>
+          </div>
+          <div class="solo-card-body">
+            <div class="solo-check-row">
+              <button class="solo-check-btn" data-key="carousel-info" data-val="done">✓ Paylaşıldı</button>
+              <button class="solo-check-btn solo-skip-btn" data-key="carousel-info" data-val="skip">✕ Atlandı</button>
+              <button class="solo-check-btn solo-reset-btn" data-key="carousel-info" data-val="none">↺ Sıfırla</button>
+            </div>
+            <div class="solo-note-wrap">
+              <input class="solo-note-input" data-key="carousel-info" placeholder="Not ekle (konu, tarih...)" />
+              <button class="solo-note-save" data-key="carousel-info">Kaydet</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reels: 3-4 hedef, tek tek işaretle -->
+        <div class="solo-card solo-card-wide" id="card-reels">
+          <div class="solo-card-header" style="background:linear-gradient(135deg,#db2777,#f472b6)">
+            <div class="solo-card-icon">🎬</div>
+            <div>
+              <div class="solo-card-title">Reels</div>
+              <div class="solo-card-sub">Haftada 3–4 hedef</div>
+            </div>
+            <div class="solo-card-badge" id="badge-reels">0 / 4</div>
+          </div>
+          <div class="solo-card-body">
+            <div class="solo-reel-slots" id="reelSlots"></div>
+            <button class="solo-add-reel-btn" id="addReelBtn">+ Reel Ekle</button>
+          </div>
+        </div>
+
+        <!-- Story: günlük -->
+        <div class="solo-card solo-card-wide" id="card-stories">
+          <div class="solo-card-header" style="background:linear-gradient(135deg,#059669,#34d399)">
+            <div class="solo-card-icon">📱</div>
+            <div>
+              <div class="solo-card-title">Story</div>
+              <div class="solo-card-sub">Düzenli • Haftada 5+ hedef</div>
+            </div>
+            <div class="solo-card-badge" id="badge-stories">0 / 5</div>
+          </div>
+          <div class="solo-card-body">
+            <div class="solo-story-days" id="storyDays"></div>
+          </div>
+        </div>
+
+      </div><!-- /.solo-grid -->
+
+      <!-- Weekly notes -->
+      <div class="solo-notes-box">
+        <div class="solo-notes-title">📝 Haftalık Notlar</div>
+        <textarea class="solo-notes-textarea" id="soloWeeklyNote" placeholder="Bu haftaya dair notların, fikirler, engeller..."></textarea>
+        <button class="solo-note-save" id="soloWeeklyNoteSave">Kaydet</button>
+      </div>
+
+      <!-- History -->
+      <div class="solo-history-box">
+        <div class="solo-notes-title">📅 Geçmiş Haftalar</div>
+        <div id="soloHistory"></div>
+      </div>
+
+    </div><!-- /#tab-solo -->
+
   </main>
 </div>
 
@@ -403,7 +594,7 @@ let _lastAiResult = null;
 let _lastExploreResult = null;
 
 // ── Tabs ───────────────────────────────────────────────────────────────────
-const TAB_TITLES = { overview:'Genel Bakış', growth:'Büyüme', content:'İçerik Analizi', ai:'AI Danışman', explore:'Keşfet & Plan' };
+const TAB_TITLES = { overview:'Genel Bakış', growth:'Büyüme', content:'İçerik Analizi', ai:'AI Danışman', explore:'Keşfet & Plan', solo:'Solo Leveling ⚡' };
 
 document.querySelectorAll('.nav-item').forEach(el => {
   el.addEventListener('click', () => {
@@ -949,6 +1140,262 @@ async function exportPdf(type) {
     btn.innerHTML = '<span>📄</span> PDF İndir';
   }
 }
+
+// ── Solo Leveling ─────────────────────────────────────────────────────────────
+
+const DAYS_TR = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+let _soloOffset = 0; // 0 = this week, -1 = last week, etc.
+let _soloData   = {};
+
+function soloWeekKey(offset = 0) {
+  const d = new Date();
+  // go to Monday of current week
+  const day = d.getDay() === 0 ? 6 : d.getDay() - 1;
+  d.setDate(d.getDate() - day + offset * 7);
+  return d.toISOString().slice(0, 10); // YYYY-MM-DD of Monday
+}
+
+function soloWeekLabel(mondayStr) {
+  const mon = new Date(mondayStr);
+  const sun = new Date(mondayStr);
+  sun.setDate(sun.getDate() + 6);
+  const fmt = d => `${d.getDate()} ${['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'][d.getMonth()]}`;
+  return `${fmt(mon)} – ${fmt(sun)} ${sun.getFullYear()}`;
+}
+
+function soloScore(data) {
+  let done = 0, total = 7; // 2 carousel + 4 reel + 1 story week
+  if ((data['carousel-dump']||{}).status === 'done') done++;
+  if ((data['carousel-info']||{}).status === 'done') done++;
+  const reels = data.reels || [];
+  const reelDone = reels.filter(r => r.status === 'done').length;
+  done += Math.min(reelDone, 4);
+  const stories = data.stories || {};
+  const storyDone = Object.values(stories).filter(v => v === 'done').length;
+  if (storyDone >= 5) done++;
+  return { done, total };
+}
+
+async function soloLoad() {
+  const key = soloWeekKey(_soloOffset);
+  try {
+    const res  = await fetch('/api/solo/' + key);
+    const json = await res.json();
+    _soloData  = json.data || {};
+  } catch(e) {
+    _soloData = {};
+  }
+  soloRender(key);
+}
+
+async function soloSave(key) {
+  await fetch('/api/solo/' + key, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(_soloData),
+  });
+}
+
+function soloRender(key) {
+  // Header
+  document.getElementById('soloWeekLabel').textContent = soloWeekLabel(key);
+  const isThisWeek = _soloOffset === 0;
+  document.getElementById('soloNextWeek').disabled = isThisWeek;
+
+  // Streak
+  document.getElementById('soloStreak').textContent = '';
+
+  // Progress
+  const { done, total } = soloScore(_soloData);
+  const pct = Math.round(done / total * 100);
+  document.getElementById('soloProgressFill').style.width = pct + '%';
+  document.getElementById('soloProgressLabel').textContent = `${done} / ${total} hedef • %${pct}`;
+
+  // Carousel dump
+  soloRenderSimple('carousel-dump');
+  soloRenderSimple('carousel-info');
+
+  // Reels
+  soloRenderReels(key);
+
+  // Stories
+  soloRenderStories(key);
+
+  // Weekly note
+  document.getElementById('soloWeeklyNote').value = _soloData.weekly_note || '';
+
+  // History
+  soloRenderHistory();
+}
+
+function soloRenderSimple(cardKey) {
+  const data   = (_soloData[cardKey] || {});
+  const status = data.status || 'none';
+  const badge  = document.getElementById('badge-' + cardKey);
+  badge.textContent = status === 'done' ? '✓ Tamam' : status === 'skip' ? '✕ Atlandı' : '—';
+  badge.className   = 'solo-card-badge' + (status === 'done' ? ' done' : status === 'skip' ? ' skip' : '');
+
+  document.querySelectorAll(`[data-key="${cardKey}"][data-val]`).forEach(btn => {
+    btn.classList.toggle('active-done', status === 'done' && btn.dataset.val === 'done');
+    btn.classList.toggle('active-skip', status === 'skip' && btn.dataset.val === 'skip');
+  });
+
+  const noteInput = document.querySelector(`.solo-note-input[data-key="${cardKey}"]`);
+  if (noteInput) noteInput.value = data.note || '';
+}
+
+function soloRenderReels(key) {
+  const reels = _soloData.reels || [];
+  const slot  = document.getElementById('reelSlots');
+  const count = reels.filter(r => r.status === 'done').length;
+  document.getElementById('badge-reels').textContent = `${count} / 4`;
+
+  slot.innerHTML = reels.map((r, i) => `
+    <div class="solo-reel-slot ${r.status}">
+      <select data-reel="${i}" class="reel-status-sel">
+        <option value="pending" ${r.status==='pending'?'selected':''}>⏳</option>
+        <option value="done"    ${r.status==='done'   ?'selected':''}>✓</option>
+        <option value="skip"    ${r.status==='skip'   ?'selected':''}>✕</option>
+      </select>
+      <input data-reel="${i}" class="reel-note-inp" value="${r.note||''}" placeholder="Konu..." />
+      <button class="solo-reel-remove" data-reel="${i}">×</button>
+    </div>
+  `).join('');
+
+  slot.querySelectorAll('.reel-status-sel').forEach(sel => {
+    sel.addEventListener('change', async () => {
+      _soloData.reels[+sel.dataset.reel].status = sel.value;
+      await soloSave(key);
+      soloRender(key);
+    });
+  });
+  slot.querySelectorAll('.reel-note-inp').forEach(inp => {
+    inp.addEventListener('blur', async () => {
+      _soloData.reels[+inp.dataset.reel].note = inp.value;
+      await soloSave(key);
+    });
+  });
+  slot.querySelectorAll('.solo-reel-remove').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      _soloData.reels.splice(+btn.dataset.reel, 1);
+      await soloSave(key);
+      soloRender(key);
+    });
+  });
+}
+
+function soloRenderStories(key) {
+  const mon     = new Date(key);
+  const stories = _soloData.stories || {};
+  const doneCount = Object.values(stories).filter(v => v === 'done').length;
+  document.getElementById('badge-stories').textContent = `${doneCount} / 5`;
+
+  document.getElementById('storyDays').innerHTML = Array.from({length:7}, (_, i) => {
+    const d = new Date(mon);
+    d.setDate(d.getDate() + i);
+    const dk     = d.toISOString().slice(0,10);
+    const status = stories[dk] || 'none';
+    const emoji  = status === 'done' ? '✓' : status === 'skip' ? '—' : '';
+    return `<div class="solo-story-day" data-dk="${dk}">
+      <div class="solo-story-dot ${status}">${emoji}</div>
+      <div class="solo-story-day-label">${DAYS_TR[i]}<br>${d.getDate()}</div>
+    </div>`;
+  }).join('');
+
+  document.querySelectorAll('.solo-story-day').forEach(el => {
+    el.addEventListener('click', async () => {
+      const dk = el.dataset.dk;
+      if (!_soloData.stories) _soloData.stories = {};
+      const cur = _soloData.stories[dk] || 'none';
+      _soloData.stories[dk] = cur === 'none' ? 'done' : cur === 'done' ? 'skip' : 'none';
+      await soloSave(key);
+      soloRender(key);
+    });
+  });
+}
+
+async function soloRenderHistory() {
+  try {
+    const res  = await fetch('/api/solo/history');
+    const json = await res.json();
+    const weeks = (json.weeks || []).slice(-8).reverse();
+    document.getElementById('soloHistory').innerHTML = weeks.length === 0
+      ? '<div style="color:var(--muted);font-size:13px">Henüz geçmiş hafta yok.</div>'
+      : weeks.map(w => {
+          const { done, total } = soloScore(w.data || {});
+          const pct = Math.round(done / total * 100);
+          return `<div class="solo-history-row">
+            <div class="solo-history-week">${soloWeekLabel(w.key)}</div>
+            <div class="solo-history-bar"><div class="solo-history-fill" style="width:${pct}%"></div></div>
+            <div class="solo-history-score">${done}/${total}</div>
+          </div>`;
+        }).join('');
+  } catch(e) {}
+}
+
+// Wire up static buttons
+document.getElementById('soloPrevWeek').addEventListener('click', async () => {
+  _soloOffset--;
+  await soloLoad();
+});
+document.getElementById('soloNextWeek').addEventListener('click', async () => {
+  if (_soloOffset >= 0) return;
+  _soloOffset++;
+  await soloLoad();
+});
+document.getElementById('soloThisWeek').addEventListener('click', async () => {
+  _soloOffset = 0;
+  await soloLoad();
+});
+
+document.getElementById('addReelBtn').addEventListener('click', async () => {
+  if (!_soloData.reels) _soloData.reels = [];
+  if (_soloData.reels.length >= 5) return;
+  _soloData.reels.push({ status: 'pending', note: '' });
+  const key = soloWeekKey(_soloOffset);
+  await soloSave(key);
+  soloRender(key);
+});
+
+document.addEventListener('click', async e => {
+  const btn = e.target.closest('[data-key][data-val]');
+  if (!btn) return;
+  const cardKey = btn.dataset.key;
+  const val     = btn.dataset.val;
+  if (!['carousel-dump','carousel-info'].includes(cardKey)) return;
+  if (!_soloData[cardKey]) _soloData[cardKey] = {};
+  _soloData[cardKey].status = val;
+  const key = soloWeekKey(_soloOffset);
+  await soloSave(key);
+  soloRender(key);
+});
+
+document.addEventListener('click', async e => {
+  const btn = e.target.closest('.solo-note-save[data-key]');
+  if (!btn) return;
+  const cardKey = btn.dataset.key;
+  const input   = document.querySelector(`.solo-note-input[data-key="${cardKey}"]`);
+  if (!input) return;
+  if (!_soloData[cardKey]) _soloData[cardKey] = {};
+  _soloData[cardKey].note = input.value;
+  const key = soloWeekKey(_soloOffset);
+  await soloSave(key);
+});
+
+document.getElementById('soloWeeklyNoteSave').addEventListener('click', async () => {
+  _soloData.weekly_note = document.getElementById('soloWeeklyNote').value;
+  const key = soloWeekKey(_soloOffset);
+  await soloSave(key);
+});
+
+// Load when tab is activated
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    if (item.dataset.tab === 'solo' && Object.keys(_soloData).length === 0) {
+      soloLoad();
+    }
+  });
+});
 
 // ── Init ────────────────────────────────────────────────────────────────────
 loadStats();

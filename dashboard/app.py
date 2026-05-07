@@ -145,5 +145,101 @@ def api_export_explore():
         return jsonify({"ok": False, "error": str(e)}), 500
 
 
+import json as _json
+
+
+# ── Solo Leveling helpers ─────────────────────────────────────────────────────
+
+def _solo_get(week_key):
+    from db import _kv_get, _use_kv
+    if _use_kv():
+        raw = _kv_get(f"solo:{week_key}")
+        return raw if isinstance(raw, dict) else {}
+    return _solo_sqlite_get(week_key)
+
+
+def _solo_save(week_key, data):
+    from db import _kv_set, _kv_get, _use_kv
+    if _use_kv():
+        _kv_set(f"solo:{week_key}", data)
+        index = _kv_get("solo:index") or []
+        if not isinstance(index, list):
+            index = []
+        if week_key not in index:
+            index.append(week_key)
+            _kv_set("solo:index", index)
+    else:
+        _solo_sqlite_save(week_key, data)
+
+
+def _solo_sqlite_get(week_key):
+    from db import _conn
+    try:
+        with _conn() as con:
+            con.execute("CREATE TABLE IF NOT EXISTS solo_weeks (week_key TEXT PRIMARY KEY, data TEXT)")
+            row = con.execute("SELECT data FROM solo_weeks WHERE week_key=?", (week_key,)).fetchone()
+            return _json.loads(row["data"]) if row else {}
+    except Exception:
+        return {}
+
+
+def _solo_sqlite_save(week_key, data):
+    from db import _conn
+    with _conn() as con:
+        con.execute("CREATE TABLE IF NOT EXISTS solo_weeks (week_key TEXT PRIMARY KEY, data TEXT)")
+        con.execute("INSERT INTO solo_weeks(week_key,data) VALUES(?,?) ON CONFLICT(week_key) DO UPDATE SET data=excluded.data",
+                    (week_key, _json.dumps(data)))
+
+
+def _solo_sqlite_history():
+    from db import _conn
+    try:
+        with _conn() as con:
+            con.execute("CREATE TABLE IF NOT EXISTS solo_weeks (week_key TEXT PRIMARY KEY, data TEXT)")
+            rows = con.execute("SELECT week_key, data FROM solo_weeks ORDER BY week_key").fetchall()
+            return [{"key": r["week_key"], "data": _json.loads(r["data"])} for r in rows]
+    except Exception:
+        return []
+
+
+# ── Solo Leveling routes ──────────────────────────────────────────────────────
+
+@app.route("/api/solo/history", methods=["GET"])
+def api_solo_history():
+    from db import _kv_get, _use_kv
+    try:
+        if _use_kv():
+            index = _kv_get("solo:index") or []
+            if not isinstance(index, list):
+                index = []
+            weeks = []
+            for k in sorted(index)[-12:]:
+                d = _kv_get(f"solo:{k}")
+                weeks.append({"key": k, "data": d if isinstance(d, dict) else {}})
+        else:
+            weeks = _solo_sqlite_history()
+        return jsonify({"ok": True, "weeks": weeks})
+    except Exception:
+        return jsonify({"ok": True, "weeks": []})
+
+
+@app.route("/api/solo/<week_key>", methods=["GET"])
+def api_solo_get(week_key):
+    try:
+        return jsonify({"ok": True, "data": _solo_get(week_key)})
+    except Exception:
+        return jsonify({"ok": True, "data": {}})
+
+
+@app.route("/api/solo/<week_key>", methods=["POST"])
+def api_solo_save_route(week_key):
+    try:
+        data = request.get_json(force=True)
+        _solo_save(week_key, data)
+        return jsonify({"ok": True})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5050)
