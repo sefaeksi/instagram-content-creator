@@ -46,15 +46,23 @@ def index():
 
 @app.route("/api/debug")
 def api_debug():
-    import os
+    import os, requests
     token   = os.getenv("INSTAGRAM_ACCESS_TOKEN", "")
     user_id = os.getenv("INSTAGRAM_USER_ID", "")
+    try:
+        r = requests.get(
+            f"https://graph.facebook.com/v21.0/{user_id}",
+            params={"fields": "id,username,followers_count", "access_token": token},
+            timeout=10,
+        )
+        api_response = r.json()
+    except Exception as e:
+        api_response = {"exception": str(e)}
     return jsonify({
-        "token_len":   len(token),
-        "token_start": token[:10] if token else "",
-        "user_id":     user_id,
-        "has_token":   bool(token),
-        "has_user_id": bool(user_id),
+        "token_len":    len(token),
+        "token_start":  token[:10] if token else "",
+        "user_id":      user_id,
+        "api_response": api_response,
     })
 
 
