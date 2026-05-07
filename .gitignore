@@ -5,3 +5,5 @@ __pycache__/
 *.pyc
 *.pdf
 sent_log.json
+dashboard/growth.db
+dashboard/__pycache__/

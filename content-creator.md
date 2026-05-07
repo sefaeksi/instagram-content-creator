@@ -1,110 +1,133 @@
 ---
 name: ssefaeksii Content Creator
 category: social-media-marketing
-version: 2.0
+version: 3.0
 ---
 
-# @ssefaeksii — Instagram Content Creator
+# @ssefaeksii — Icerik Stratejisi
 
-## Hesap Kimliği
+## Kim Bu Adam
 
-- **Kullanıcı adı:** @ssefaeksii
-- **Niş:** Lifestyle & Kişisel Gelişim
-- **Format:** Daily Vlog tarzı ama estetize edilmiş lifestyle içeriği
-- **Dil:** Türkçe (Türkçe karakter kullanma — sadece İngilizce klavye karakterleri)
-- **Takipçi:** ~7.200 | Hedef: organik büyüme
-- **Ton:** Keskin, samimi, motive edici — ne fazla kurumsal ne fazla kaotik
+- **Meslek:** SAP Danismani (3 yildir, aktif calisma hayati)
+- **Sehir:** Istanbul
+- **Yas profili:** 20'li yaslarin sonunda, hayatini aktif sekilde insa eden biri
+- **Spor rutini:** Pazartesi/Sali/Persembe/Cuma gym | Carsamba + Cumartesi kosu kulubu | 1 gun halisaha = 9 antrenman/hafta
+- **Ofis gunleri:** Sali ve Carsamba (diger gunler remote)
+- **Kosu kulubu:** Carsamba ve Cumartesi, duzenli bulusma yapiliyor
+- **Okuma:** Rezonans Kanunu (son kitap) — zihinsel donusum, frekans, cekim
+- **Giyim:** Rahat, sade, fonksiyonel — fazla gostermeden ozguveni yansitan
+- **Kahve:** Gunluk ritual, kafeler gunluk hayatin parcasi
+- **Iliski:** 2 yillik iliski bu hafta bitti — toparlanma sureci devam ediyor
+- **Takipci:** ~7.200 | Hedef: organik buyume, gercek baglanti
 
 ## Marka Sesi
 
-Zedan Mutlu'nun keskinliği + Marvin Brooks'un polished günlük anlatısı + Nico Rauchenwald'ın sinematik estetiği.
+"Bu adam hayatini yasamasini biliyor — hem zorluklarla yuzlesiyor hem de ilerliyor."
 
-- Doğrudan ve özgüvenli konuş — vaaz verme, yaşayarak anlat
-- Kusurları saklamak yerine onları içeriğe dönüştür
-- Her içerik "bu adam hayatını inşa ediyor" hissini vermeli
-- Jargon yok, sade Türkçe, vurucu cümleler
+- **Ton:** Samimi, keskin, dogal. Performatif degil — gercek.
+- **Format tercihi:** VLOG onceliginde. Kameraya bakmadan, hayati kaydederek anlatan stil.
+- **Anlati:** 1. sahis, deneyimden konusan, vaaz vermeden gostere gostere anlatan.
+- **Denge:** Ofis insani + sporcu + dusunur. Tek boyutlu degil.
+- **Ilham kaynagi:** @zedan.mutlu (keskinlik), @marvinbrooks (polished gunluk anlati), @nicorauchenwald (sinematik estetik)
 
-## İçerik Sütunları
+## Icerik Sutunlari (6 Farkli Eksen)
 
-### 1. 75 HARD Journey
-Zihinsel dayanıklılık programı. Günlük hesap verebilirlik, zorluklar, iç ses.
-- Format: Reel, Story
-- Ton: Ham, dürüst, motive edici
-- Örnek hook: "Bugun 75 HARD'in X. gunu. Dun neredeyse biraktim."
+### 1. Spor Makinesi
+9 antrenman/hafta yapan birinin gercek hayati. Sadece estetik degil — zihinsel savaslar, yorgunluk, yine de gitmek.
+- **Format:** Reel (vlog kesiti), Story (gunluk check-in)
+- **Alt konular:**
+  - Sabah antrenmani vlogu (saat 06:00-07:00 arasi Istanbul'da)
+  - Halisaha antrenmani — takim, rekabet, eglence
+  - Kosu kulubu bulusmasi — sehirde kosmak, topluluk
+  - PR kirmak, hedef koymak, geri dusmek ve kalkmak
+  - "Neden bu kadar cok antrenman yapiyorum" — zihinsel aciklama
+- **Hooks:** "9 antrenman yaptigimda ofiste nasil hissediyorum.", "Halisaha antrenmanindan once boyle hissediyorum.", "Sabah 6'da koskam icin tek sebep su."
 
-### 2. Sabah Rutini & Günlük Sistem
-Sabah 5'te kalkmak, odaklanmak, verimli olmak. Sistemler ve alışkanlıklar.
-- Format: Reel, Carousel
-- Ton: Pratik, uygulanabilir, ilham verici
-- Örnek hook: "Sabah rutinimde degistirdim — fark inanilmaz."
+### 2. SAP Danismani Hayati
+Beyaz yaka gercekligi — ofis, toplanti, proje, kahve arasi. Izleyicinin cogu bu hayati merak ediyor ya da yasıyor.
+- **Format:** Vlog (ofis gunu), Carousel (ne ogrendim), Reel (gunluk snippet)
+- **Alt konular:**
+  - Ofis vlogu — bir SAP danismaninin gunu
+  - SAP nedir, ne yapiyor bu adam aslinda (merak edenlere)
+  - Is-spor-kisisel hayat dengesini nasil kuruyor
+  - Kariyer 3. yilinda neredeyim, nereye gidiyorum
+  - Toplantidan kosa, kosan sonra tekrar ofise
+- **Hooks:** "SAP danismani olarak gunde 3 toplanti varken kosu antrenmanima nasil yetisiyorum.", "3 yillik kariyer — simdi neredeyim ve nereye gidiyorum.", "Ofis hayatinin kimsenin gostermedigi tarafi."
 
-### 3. Kişisel Gelişim & Mindset
-Kitap özetleri, hayat dersleri, zihinsel engeller, büyüme anları.
-- Format: Carousel, Reel
-- Ton: Egitici, samimi, derinlikli
-- Örnek hook: "Bu kitap benim bakis acimi tamamen degistirdi."
+### 3. Istanbul Vlogu
+Istanbul'da aktif bir hayat yasayan birinin gozunden sehir. Spor + is + gunluk yasam.
+- **Format:** Reel (vlog kesiti), Story (spontane an)
+- **Alt konular:**
+  - Sabah rutini Istanbul'da (spor + kahve + ofis)
+  - Kosu guzergahlari — Bogazici, parklar, sahil
+  - Favori kahve mekanları — calisma ortami veya dinlenme
+  - Haftasonu vs. hafta ici — fark ne
+  - Sehirde kim olmak istiyorum
+- **Hooks:** "Istanbul'da sabah 6'da kosan biri olmanin farki.", "Bu kafede her sabah aynı seyi siparis ediyorum.", "Sehrin en guzel saati erken sabah."
 
-### 4. Lifestyle Estetik
-Giyim, ortam, gunluk anlar — hayatin estetize edilmis hali.
-- Format: Tek paylasim, kisa Reel
-- Ton: Minimal, ozgüvenli, ilham verici
-- Örnek hook: "Standartlarini yukselt."
+### 4. Zihinsel Donusum & Kisisel Gelisim
+Kitaplar, dersler, bakis acisi degisiklikleri. Ama sahte motivasyon degil — gercek icsel donusum.
+- **Format:** Carousel (kitap ozeti/ders), Reel (kisa insight)
+- **Alt konular:**
+  - Rezonans Kanunu'ndan cikardigi somut dersler (sahsi deneyimle)
+  - Spor disiplininin zihinsel etkileri
+  - 3 yillik is hayatindan hayat dersleri
+  - Iliski bittikten sonra kendini yeniden insa etmek
+  - Rutinin insan uzerindeki donusturucu gucu
+- **Hooks:** "Rezonans Kanunu bana su seyi ogrettti.", "3 yillik is hayatindan ogrendigim en onemli sey.", "Her gun antrenman yapinca zihnim nasil degisti."
 
-### 5. Ham & Samimi Anlar
-Basarisizliklar, yeniden baslamalar, dürüst güncellemeler. Hikayenin gercek kismi.
-- Format: Story, Reel
-- Ton: Kırılgan ama güçlü, dogal
-- Örnek hook: "Dürüst olmak gerekirse bu haftayı berbat geçirdim."
+### 5. Kırılgan Ama Guclu Anlar
+Gercek anlarin paylasildigi yer. Iliski acisi, yeniden baslamak, zor gunler, yine de devam etmek. Bu sutun en yuksek etkiyi yaratir.
+- **Format:** Reel (vlog monolog), Story (kisa dürüstlük)
+- **Alt konular:**
+  - 2 yillik iliskinin bitmesi — dürüst bir paylasim (zamanlama kullaniciya gore)
+  - Zor bir gun nasil gecti, ne hissetti
+  - "Biraktim ama geri dondüm" anlari — spor, is, her sey
+  - Kendine karsi donüst olmak
+  - Yalniz olmak vs. yalniz hissetmek
+- **Hooks:** "Bu hafta hayatimda buyuk bir sey degisti.", "Herkes iyi gunden bahsediyor, ben kotu gunumu anlatarim.", "2 yil sonra her seyin degisebilecegini ogrendim."
 
-## Haftalık İçerik Ritmi
+### 6. Challenge & Commit
+Kendini bir seye adamak, bunu kamuoyuna acik yapmak ve hesap vermek. Gecmisteki challenge videolari en iyi performansi bu yuzden aldı.
+- **Format:** Reel serisi, Story (gunluk update)
+- **Alt konular:**
+  - 75 HARD (baslatilinca)
+  - 30 gun challenge'lari — spor, uyku, dijital detoks
+  - "X gun boyunca Y yaptim, iste sonuc" format
+  - Haftanin sporunü tamamlamak — hesap verme paylasimi
+- **Hooks:** "Bugun X'in N. gunundeyim.", "Bu ay kendime bir taahhut verdim.", "Son 30 gun icinde su degisti."
 
-| Gün | Format | Sütun |
-|---|---|---|
-| Pazartesi | Reel | Motivasyon / Hafta başlangıcı |
-| Salı | Carousel | Kişisel gelişim / Kitap |
-| Çarşamba | Reel | 75 HARD / Rutin |
-| Perşembe | Story serisi | BTS / Ham an |
-| Cuma | Reel | Lifestyle estetik |
-| Cumartesi | Carousel | Haftalık öğrendiklerim |
-| Pazar | Story | Hafta sonu rutini / Dinlenme |
+## Haftalik Icerik Ritmi
 
-## Hook Kuralları
+| Gun | Gercek Hayat | Format | Sutun |
+|---|---|---|---|
+| Pazartesi | Gym (remote) | Reel | Spor / Hafta baslangici enerjisi |
+| Sali | Gym + Ofis | Carousel | SAP hayati / Ofis vlog / Kariyer insight |
+| Carsamba | Kosu kulubu + Ofis | Reel | Kosu kulubu bulusmasi / Istanbul vlog |
+| Persembe | Gym (remote) | Story serisi | Kirılgan an / Ham icerik |
+| Cuma | Gym (remote) | Reel | Zihinsel donusum / Kitap / Hafta kapanisi |
+| Cumartesi | Kosu kulubu | Reel | Kosu vlog / Halisaha / Spor serisi |
+| Pazar | Dinlenme (remote) | Story | Hafta sonu rutini / Gelecek haftaya hazirlik |
 
-- İlk 3 saniye kaybedilirse izlenme süresi çöker
-- Soru veya çarpıcı ifadeyle aç: "Bunu biliyor musun?", "Yanılıyordum.", "X gün sonra her şey değişti."
-- Rakam kullan: "5 alışkanlık", "75 gün", "Sabah 5"
-- Kişisel deneyimden başla, genele çık
+## Hook Kurallari
+
+- **Vlog stili:** Kameraya bakarak veya gunluk hayatin icinden — "filming my life" hissi
+- **Sayi kullan:** "9 antrenman", "3 yil", "2 yillik", "haftada 4 gun"
+- **Çatışma kur:** Spor + ofis, yorgunluk + devam etmek, iliski acisi + ilerleme
+- **Soru degil, ifade:** "Neden bu kadar cok spor yapiyorum?" yerine "9 antrenman yaptim ve iste fark."
+- **Kisisel bas:** "Ben" ile basla, genel prensipler ile bitir
 
 ## Caption Stratejisi
 
-- İlk satır hook gibi davranır — kırpılmadan önce dikkat çekmeli
-- Mikro-blog tarzı: 3-5 cümle, kişisel, değer veren
-- Her caption'da net bir CTA: "Sen ne düşünüyorsun?", "Kaydet, unutma.", "Takip et, yolculuğu izle."
-- IG SEO için caption içine anahtar kelimeler göm: kisisel gelisim, lifestyle, motivasyon, rutin, basari
+- Mikro-blog: 3-5 cumle, sahsi, deger katan
+- **IG SEO kelimeleri:** spordisiplini, sap danismani, istanbulda yasam, kisisel gelisim, kosu, beyazyaka, vlog, gunlukrutin, donusum
+- CTA: "Sen ne yapiyorsun?", "Kaydet, unut.", "Takip et, yolculugu izle."
+- Hashtag: 10-15, niche + orta + kucuk karisimi
 
-## Hashtag Stratejisi
+## Kacınılacaklar
 
-- 10-15 hashtag, karışık büyüklükte
-- Niş etiketler: #kisiselgelisim #türkmotivasyon #yasam tarzi #75hard #sabahrutini
-- Orta ölçekli: #motivation #lifestyle #selfimprovement #dailyvlog #mindset
-- Küçük niş: #türkinstagram #gunlukrutin #kisiselbasari
-
-## Kaçınılacaklar
-
-- Aşırı pozitif, sahte motivasyon klişeleri ("Her şey mümkün!")
-- Uzun, sıkıcı caption'lar — vurucu ve kısa tut
-- Tutarsız estetik — her paylasim hesabın kimliğiyle uyumlu olmalı
-- Mükemmeliyetçilik bahanesiyle geciktirme — ham içerik çoğu zaman daha iyi performans gösterir
-
-## İlham Alınan Hesaplar
-
-- **@zedan.mutlu** — Keskin kişisel marka, "be sharp" tonu, maskülen lifestyle
-- **@marvinbrooks** — "Digital diary" anlatısı, polished estetik, fitness + lifestyle dengesi
-- **@nicorauchenwald** — Sinematik görsel kalite, lifestyle + seyahat, yaratıcı içerik
-
-## Büyüme Hedefleri
-
-- Organik takipçi büyümesi — viral Reels odaklı
-- Kaydetme ve paylaşma oranını yüksek tut (Carousel ve Reel)
-- Story ile günlük bağ kur, Reel ile yeni kitle çek
-- Tutarlılık: haftada minimum 4 paylasim
+- Sahte pozitiflik — "Her sey mumkun!" klisesi yok
+- Sadece estetik icin icerik — anlati olmadan gorsel
+- Tekrar eden format (art arda 3 Reel veya art arda 3 motivasyon icerigi olmamali)
+- Vaaz vermek — yasamasini anlat, ogretme
+- SAP iceriklerini teknik tutmak — insani taraf on planda olmali

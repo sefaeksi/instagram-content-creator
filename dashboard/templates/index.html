@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>@ssefaeksii — Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0a0a0f;
+    --surface:  #111118;
+    --border:   #1e1e2e;
+    --purple:   #7c3aed;
+    --purple-l: #9b59f5;
+    --pink:     #db2777;
+    --green:    #10b981;
+    --yellow:   #f59e0b;
+    --red:      #ef4444;
+    --text:     #e2e8f0;
+    --muted:    #64748b;
+    --card-bg:  #13131c;
+  }
+
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+  /* ── Layout ── */
+  .layout { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 220px; min-width: 220px; background: var(--surface);
+    border-right: 1px solid var(--border); display: flex; flex-direction: column;
+    padding: 24px 0; position: sticky; top: 0; height: 100vh;
+  }
+  .sidebar-logo { padding: 0 20px 24px; border-bottom: 1px solid var(--border); }
+  .sidebar-logo .handle { font-size: 15px; font-weight: 700; color: var(--purple-l); }
+  .sidebar-logo .sub    { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .sidebar-logo .hard75-badge {
+    display: inline-block; margin-top: 8px; background: #78350f;
+    color: #fcd34d; font-size: 11px; font-weight: 700;
+    padding: 2px 8px; border-radius: 12px;
+  }
+
+  .nav { margin-top: 16px; flex: 1; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 11px 20px;
+    cursor: pointer; color: var(--muted); font-size: 13px; font-weight: 500;
+    border-left: 3px solid transparent; transition: all .15s;
+  }
+  .nav-item:hover  { color: var(--text); background: rgba(124,58,237,.08); }
+  .nav-item.active { color: var(--purple-l); border-left-color: var(--purple); background: rgba(124,58,237,.12); }
+  .nav-item .icon  { font-size: 16px; width: 20px; text-align: center; }
+
+  .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
+  .refresh-btn {
+    width: 100%; padding: 8px; background: var(--purple); border: none;
+    border-radius: 8px; color: #fff; font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: background .15s;
+  }
+  .refresh-btn:hover { background: var(--purple-l); }
+
+  .main { flex: 1; padding: 28px 32px; overflow-y: auto; max-width: calc(100vw - 220px); }
+
+  /* ── Header ── */
+  .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .page-title  { font-size: 20px; font-weight: 700; }
+  .last-updated { font-size: 11px; color: var(--muted); }
+
+  /* ── Tabs ── */
+  .tabs { display: flex; gap: 4px; margin-bottom: 24px; background: var(--surface); padding: 4px; border-radius: 10px; width: fit-content; border: 1px solid var(--border); }
+  .tab { padding: 7px 18px; border-radius: 7px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--muted); transition: all .15s; border: none; background: none; }
+  .tab.active { background: var(--purple); color: #fff; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── Stat cards ── */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .stat-card {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 20px; position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent, var(--purple));
+  }
+  .stat-label  { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+  .stat-value  { font-size: 28px; font-weight: 800; line-height: 1; }
+  .stat-delta  { font-size: 12px; margin-top: 6px; }
+  .delta-up   { color: var(--green); }
+  .delta-down { color: var(--red); }
+  .delta-zero { color: var(--muted); }
+
+  /* ── Charts ── */
+  .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .chart-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .chart-title { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: .5px; }
+  .chart-wrap  { position: relative; height: 200px; }
+
+  /* ── Content Analysis ── */
+  .content-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .content-sort-bar { display: flex; gap: 8px; margin-bottom: 16px; align-items: center; }
+  .sort-btn { padding: 5px 14px; border: 1px solid var(--border); border-radius: 20px; background: none; color: var(--muted); font-size: 12px; cursor: pointer; transition: all .15s; }
+  .sort-btn.active { background: var(--purple); color: #fff; border-color: var(--purple); }
+  .sort-label { font-size: 12px; color: var(--muted); margin-right: 4px; }
+
+  .posts-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .post-card {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; transition: border-color .15s;
+  }
+  .post-card:hover { border-color: rgba(124,58,237,.4); }
+  .post-card.is-video { border-left: 3px solid var(--pink); }
+  .post-card.is-image { border-left: 3px solid var(--purple-l); }
+  .post-card.is-carousel { border-left: 3px solid #38bdf8; }
+
+  .post-inner { padding: 16px 20px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; }
+
+  .post-left { display: flex; flex-direction: column; gap: 8px; }
+  .post-top  { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  .post-type-badge { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 20px; text-transform: uppercase; }
+  .badge-video    { background: rgba(219,39,119,.15); color: #f472b6; }
+  .badge-image    { background: rgba(124,58,237,.15); color: var(--purple-l); }
+  .badge-carousel { background: rgba(2,132,199,.15); color: #38bdf8; }
+
+  .post-date  { font-size: 11px; color: var(--muted); }
+  .post-caption { font-size: 13px; color: var(--text); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  .post-metrics-row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 4px; }
+  .metric-item { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 52px; }
+  .metric-icon { font-size: 14px; }
+  .metric-value { font-size: 14px; font-weight: 700; line-height: 1; }
+  .metric-value.views-val { color: #f472b6; }
+  .metric-value.reach-val { color: #a78bfa; }
+  .metric-value.save-val  { color: #34d399; }
+  .metric-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .3px; }
+
+  .post-bars { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+  .bar-row   { display: flex; align-items: center; gap: 8px; }
+  .bar-label { font-size: 10px; color: var(--muted); width: 46px; text-align: right; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 5px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; }
+  .bar-fill  { height: 100%; border-radius: 3px; transition: width .4s ease; }
+  .bar-num   { font-size: 10px; color: var(--muted); width: 38px; flex-shrink: 0; }
+
+  .post-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .er-badge { font-size: 18px; font-weight: 800; line-height: 1; }
+  .er-label { font-size: 9px; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); }
+  .perf-tag { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
+  .perf-top  { background: rgba(16,185,129,.15); color: #34d399; }
+  .perf-mid  { background: rgba(245,158,11,.15); color: #fcd34d; }
+  .perf-low  { background: rgba(239,68,68,.1);   color: #fca5a5; }
+
+  .er-high { color: var(--green); }
+  .er-mid  { color: var(--yellow); }
+  .er-low  { color: var(--red); }
+
+  .post-link { font-size: 11px; color: var(--purple-l); text-decoration: none; }
+  .post-link:hover { text-decoration: underline; }
+
+  /* ── AI Advisor ── */
+  .advisor-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .advisor-box  { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .advisor-title { font-size: 13px; font-weight: 700; color: var(--purple-l); margin-bottom: 14px; text-transform: uppercase; letter-spacing: .5px; }
+  .analysis-text { font-size: 13px; color: var(--text); line-height: 1.7; white-space: pre-line; }
+  .tip-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .tip-item { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.5; }
+  .tip-num  { min-width: 22px; height: 22px; background: var(--purple); border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  .idea-cards { display: flex; flex-direction: column; gap: 14px; }
+  .idea-card  { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .idea-header { padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+  .idea-format { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; }
+  .fmt-reel     { background: rgba(219,39,119,.2); color: #f472b6; }
+  .fmt-carousel { background: rgba(2,132,199,.2); color: #38bdf8; }
+  .fmt-story    { background: rgba(16,185,129,.2); color: #6ee7b7; }
+  .idea-body   { padding: 0 16px 14px; }
+  .idea-title  { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .idea-hook   { font-size: 12px; color: var(--purple-l); font-style: italic; margin-bottom: 10px; }
+  .idea-points { list-style: none; display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+  .idea-points li::before { content: '▸ '; color: var(--purple); }
+  .idea-points li { font-size: 12px; color: var(--muted); padding-left: 14px; position: relative; }
+  .idea-points li::before { position: absolute; left: 0; }
+  .idea-caption   { font-size: 12px; color: var(--text); line-height: 1.6; margin-bottom: 8px; padding: 10px; background: rgba(255,255,255,.03); border-radius: 6px; }
+  .idea-hashtags  { font-size: 11px; color: var(--purple-l); margin-bottom: 8px; line-height: 1.6; }
+  .idea-cta       { font-size: 12px; color: var(--green); font-weight: 600; }
+  .idea-why       { font-size: 11px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); font-style: italic; }
+
+  .generate-btn {
+    padding: 12px 28px; background: linear-gradient(135deg, var(--purple), var(--pink));
+    border: none; border-radius: 10px; color: #fff; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: opacity .15s; display: flex; align-items: center; gap: 8px;
+  }
+  .generate-btn:hover    { opacity: .85; }
+  .generate-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  .best-time-box { background: rgba(124,58,237,.1); border: 1px solid rgba(124,58,237,.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; font-size: 13px; }
+  .best-time-box strong { color: var(--purple-l); }
+
+  /* ── Explore ── */
+  .explore-grid   { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  .explore-box    { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .explore-title  { font-size: 13px; font-weight: 700; color: var(--purple-l); margin-bottom: 14px; text-transform: uppercase; letter-spacing: .5px; display: flex; align-items: center; gap: 8px; }
+  .explore-posts  { display: flex; flex-direction: column; gap: 10px; }
+  .explore-post   { background: rgba(255,255,255,.03); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .explore-post-left { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+  .explore-ratio  { font-size: 20px; font-weight: 800; color: #f472b6; white-space: nowrap; }
+  .explore-ratio-label { font-size: 9px; color: var(--muted); text-transform: uppercase; }
+  .explore-caption { font-size: 12px; color: var(--text); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .explore-metrics { display: flex; gap: 10px; flex-wrap: wrap; }
+  .explore-metric  { font-size: 11px; color: var(--muted); }
+
+  .rule-list  { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .rule-item  { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.5; }
+  .rule-icon  { font-size: 16px; flex-shrink: 0; }
+
+  .week-grid  { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 24px; }
+  .week-card  { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 12px; display: flex; flex-direction: column; gap: 8px; min-height: 220px; }
+  .week-card.potential-high   { border-top: 3px solid var(--green); }
+  .week-card.potential-mid    { border-top: 3px solid var(--yellow); }
+  .week-card.potential-low    { border-top: 3px solid var(--muted); }
+  .week-day   { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+  .week-date  { font-size: 10px; color: var(--muted); margin-top: -4px; }
+  .week-fmt   { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; width: fit-content; }
+  .week-title { font-size: 12px; font-weight: 700; line-height: 1.4; }
+  .week-hook  { font-size: 11px; color: var(--purple-l); font-style: italic; line-height: 1.4; }
+  .week-time  { font-size: 11px; color: var(--muted); margin-top: auto; }
+  .week-potential { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px; width: fit-content; }
+  .pot-high { background: rgba(16,185,129,.15); color: #34d399; }
+  .pot-mid  { background: rgba(245,158,11,.15); color: #fcd34d; }
+  .pot-low  { background: rgba(100,116,139,.15); color: var(--muted); }
+  .week-reason { font-size: 10px; color: var(--muted); line-height: 1.4; font-style: italic; }
+
+  .explore-btn {
+    padding: 12px 28px; background: linear-gradient(135deg, #7c3aed, #0284c7);
+    border: none; border-radius: 10px; color: #fff; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: opacity .15s; display: flex; align-items: center; gap: 8px;
+  }
+  .explore-btn:hover    { opacity: .85; }
+  .explore-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  .export-pdf-btn {
+    padding: 12px 22px; background: linear-gradient(135deg, #059669, #0d9488);
+    border: none; border-radius: 10px; color: #fff; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: opacity .15s; display: inline-flex; align-items: center; gap: 8px;
+  }
+  .export-pdf-btn:hover    { opacity: .85; }
+  .export-pdf-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* ── Loading ── */
+  .loading { display: flex; align-items: center; justify-content: center; padding: 60px; color: var(--muted); gap: 12px; font-size: 14px; }
+  .spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--purple); border-radius: 50%; animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-box { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); border-radius: 10px; padding: 16px; color: #fca5a5; font-size: 13px; }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="handle">@ssefaeksii</div>
+      <div class="sub">Instagram Dashboard</div>
+      <div id="hard75Badge" style="display:none" class="hard75-badge">75 HARD • Gün <span id="hard75Day">-</span></div>
+    </div>
+    <nav class="nav">
+      <div class="nav-item active" data-tab="overview"><span class="icon">📊</span> Genel Bakış</div>
+      <div class="nav-item" data-tab="growth"><span class="icon">📈</span> Büyüme</div>
+      <div class="nav-item" data-tab="content"><span class="icon">🎬</span> İçerik Analizi</div>
+      <div class="nav-item" data-tab="ai"><span class="icon">🤖</span> AI Danışman</div>
+      <div class="nav-item" data-tab="explore"><span class="icon">🔍</span> Keşfet & Plan</div>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="refresh-btn" id="refreshBtn">↻ Yenile</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="page-header">
+      <div class="page-title" id="pageTitle">Genel Bakış</div>
+      <div class="last-updated" id="lastUpdated"></div>
+    </div>
+
+    <!-- OVERVIEW TAB -->
+    <div class="tab-panel active" id="tab-overview">
+      <div id="overviewLoading" class="loading"><div class="spinner"></div> Instagram verileri yükleniyor...</div>
+      <div id="overviewContent" style="display:none">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-title">Takipçi Büyümesi (Son 60 Gün)</div>
+            <div class="chart-wrap"><canvas id="growthChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">İçerik Tipi Performansı</div>
+            <div class="chart-wrap"><canvas id="typeChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div id="overviewError" style="display:none" class="error-box"></div>
+    </div>
+
+    <!-- GROWTH TAB -->
+    <div class="tab-panel" id="tab-growth">
+      <div class="stats-grid" id="growthStats"></div>
+      <div class="chart-card" style="margin-bottom:20px">
+        <div class="chart-title">Takipçi Geçmişi</div>
+        <div class="chart-wrap" style="height:280px"><canvas id="growthBigChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- CONTENT TAB -->
+    <div class="tab-panel" id="tab-content">
+      <div class="content-summary" id="contentSummary"></div>
+      <div class="content-sort-bar">
+        <span class="sort-label">Sırala:</span>
+        <button class="sort-btn active" data-sort="date">Tarih</button>
+        <button class="sort-btn" data-sort="er">Engagement</button>
+        <button class="sort-btn" data-sort="reach">Reach</button>
+        <button class="sort-btn" data-sort="views">Görüntüleme</button>
+        <button class="sort-btn" data-sort="saves">Kaydetme</button>
+      </div>
+      <div class="posts-list" id="postsGrid">
+        <div class="loading"><div class="spinner"></div> Gönderiler yükleniyor...</div>
+      </div>
+    </div>
+
+    <!-- AI ADVISOR TAB -->
+    <div class="tab-panel" id="tab-ai">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:24px">
+        <button class="generate-btn" id="generateBtn">
+          <span>✨</span> Verilerimi Analiz Et ve Fikir Üret
+        </button>
+        <button class="export-pdf-btn" id="aiExportBtn" style="display:none" onclick="exportPdf('advisor')">
+          <span>📄</span> PDF İndir
+        </button>
+      </div>
+      <div id="aiLoading" style="display:none" class="loading"><div class="spinner"></div> Gemini analiz ediyor...</div>
+      <div id="aiError"   style="display:none" class="error-box"></div>
+      <div id="aiResult"  style="display:none">
+        <div class="advisor-wrap" id="advisorWrap"></div>
+        <div style="margin-top:20px">
+          <div style="font-size:15px;font-weight:700;margin-bottom:14px;">🎯 Veriye Dayalı İçerik Fikirleri</div>
+          <div class="idea-cards" id="ideaCards"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPLORE TAB -->
+    <div class="tab-panel" id="tab-explore">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:24px">
+        <button class="explore-btn" id="exploreBtn">
+          <span>🔍</span> Keşfeti Analiz Et & Haftalık Plan Oluştur
+        </button>
+        <button class="export-pdf-btn" id="exploreExportBtn" style="display:none" onclick="exportPdf('explore')">
+          <span>📄</span> PDF İndir
+        </button>
+      </div>
+      <div id="exploreLoading" style="display:none" class="loading"><div class="spinner"></div> Keşfet analizi yapılıyor...</div>
+      <div id="exploreError"   style="display:none" class="error-box"></div>
+      <div id="exploreResult"  style="display:none">
+        <div style="font-size:15px;font-weight:700;margin-bottom:16px;">📅 Haftalık İçerik Takvimi</div>
+        <div class="week-grid" id="weekGrid"></div>
+        <div class="explore-box" style="margin-bottom:20px">
+          <div class="explore-title">🌍 Şu An Instagram'da Trend Olan Konular</div>
+          <div id="trendingTopics" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px"></div>
+        </div>
+        <div class="explore-grid">
+          <div class="explore-box">
+            <div class="explore-title">🚀 Senin Keşfete Giren İçeriklerin</div>
+            <div class="explore-posts" id="explorePosts"></div>
+          </div>
+          <div class="explore-box">
+            <div class="explore-title">⚡ Viral Kurallar</div>
+            <ul class="rule-list" id="viralRules"></ul>
+          </div>
+        </div>
+        <div class="explore-box" style="margin-bottom:20px">
+          <div class="explore-title">📊 Keşfet Analizi</div>
+          <div class="analysis-text" id="exploreAnalysis"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+let _summary      = null;
+let _growth       = null;
+let _charts       = {};
+let _lastAiResult = null;
+let _lastExploreResult = null;
+
+// ── Tabs ───────────────────────────────────────────────────────────────────
+const TAB_TITLES = { overview:'Genel Bakış', growth:'Büyüme', content:'İçerik Analizi', ai:'AI Danışman', explore:'Keşfet & Plan' };
+
+document.querySelectorAll('.nav-item').forEach(el => {
+  el.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    const tab = el.dataset.tab;
+    document.getElementById(`tab-${tab}`).classList.add('active');
+    document.getElementById('pageTitle').textContent = TAB_TITLES[tab];
+  });
+});
+
+// ── Refresh ────────────────────────────────────────────────────────────────
+document.getElementById('refreshBtn').addEventListener('click', async () => {
+  await fetch('/api/refresh', {method:'POST'});
+  location.reload();
+});
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+const fmt = n => n == null ? '—' : Number(n).toLocaleString('tr-TR');
+const pct = n => n == null ? '—' : n + '%';
+
+function erClass(er) {
+  if (er >= 3) return 'er-high';
+  if (er >= 1) return 'er-mid';
+  return 'er-low';
+}
+
+function fmtBadge(type) {
+  const map = { VIDEO:'Reel', CAROUSEL_ALBUM:'Carousel', IMAGE:'Foto' };
+  const label = map[type] || type;
+  const cls   = type === 'VIDEO' ? 'fmt-reel' : type === 'CAROUSEL_ALBUM' ? 'fmt-carousel' : 'fmt-story';
+  return `<span class="idea-format ${cls}">${label}</span>`;
+}
+
+function ideaFormatBadge(fmt) {
+  const f = fmt.toLowerCase();
+  const cls = f.includes('reel') ? 'fmt-reel' : f.includes('carousel') ? 'fmt-carousel' : 'fmt-story';
+  return `<span class="idea-format ${cls}">${fmt}</span>`;
+}
+
+// ── Load stats ─────────────────────────────────────────────────────────────
+async function loadStats() {
+  try {
+    const res  = await fetch('/api/stats');
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error);
+
+    _summary = json.summary;
+    _growth  = json.growth;
+
+    renderOverview(json);
+    renderGrowthTab(json);
+    renderContentTab();
+    checkHard75();
+
+    document.getElementById('lastUpdated').textContent = 'Son güncelleme: ' + new Date().toLocaleTimeString('tr-TR');
+    document.getElementById('overviewLoading').style.display  = 'none';
+    document.getElementById('overviewContent').style.display  = 'block';
+  } catch(e) {
+    document.getElementById('overviewLoading').style.display = 'none';
+    const el = document.getElementById('overviewError');
+    el.style.display = 'block';
+    el.innerHTML = `<strong>Hata:</strong> ${e.message}<br><br>
+      <small>INSTAGRAM_ACCESS_TOKEN ve INSTAGRAM_USER_ID değerlerini .env dosyasına eklediğinden emin ol.</small>`;
+  }
+}
+
+// ── Overview ───────────────────────────────────────────────────────────────
+function renderOverview({summary, weekly_delta, growth}) {
+  const acc  = summary.account;
+  const grid = document.getElementById('statsGrid');
+
+  const cards = [
+    { label:'Takipçi', value: fmt(acc.followers_count), delta: weekly_delta, accent:'#7c3aed' },
+    { label:'Takip Edilen', value: fmt(acc.follows_count), accent:'#6366f1' },
+    { label:'Gönderi Sayısı', value: fmt(acc.media_count), accent:'#8b5cf6' },
+    { label:'Reach (28g)', value: fmt(summary.reach_28d), accent:'#db2777' },
+    { label:'Etkileşim (28g)', value: fmt(summary.accounts_engaged), accent:'#0284c7' },
+    { label:'Profil Ziyareti (28g)', value: fmt(summary.profile_views_28d), accent:'#10b981' },
+  ];
+
+  grid.innerHTML = cards.map(c => {
+    const deltaHtml = c.delta != null
+      ? `<div class="stat-delta ${c.delta > 0 ? 'delta-up' : c.delta < 0 ? 'delta-down' : 'delta-zero'}">
+           ${c.delta > 0 ? '▲' : c.delta < 0 ? '▼' : '—'} ${Math.abs(c.delta)} bu hafta
+         </div>` : '';
+    return `<div class="stat-card" style="--accent:${c.accent}">
+      <div class="stat-label">${c.label}</div>
+      <div class="stat-value">${c.value}</div>
+      ${deltaHtml}
+    </div>`;
+  }).join('');
+
+  // Growth chart
+  if (growth && growth.length > 0) {
+    const labels = growth.map(r => r.date.slice(5));
+    const values = growth.map(r => r.followers);
+    if (_charts.growth) _charts.growth.destroy();
+    _charts.growth = new Chart(document.getElementById('growthChart'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Takipçi',
+          data: values,
+          borderColor: '#7c3aed',
+          backgroundColor: 'rgba(124,58,237,.1)',
+          fill: true,
+          tension: .4,
+          pointRadius: 3,
+          pointBackgroundColor: '#7c3aed',
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: '#1e1e2e' }, ticks: { color: '#64748b', maxTicksLimit: 8 } },
+          y: { grid: { color: '#1e1e2e' }, ticks: { color: '#64748b' } }
+        }
+      }
+    });
+  }
+
+  // Content type chart
+  const typeStats = summary.type_stats || {};
+  const typeLabels = Object.keys(typeStats).map(t => ({ VIDEO:'Reel', CAROUSEL_ALBUM:'Carousel', IMAGE:'Foto' }[t] || t));
+  const typeValues = Object.values(typeStats).map(v => v.avg_eng);
+  if (typeLabels.length > 0) {
+    if (_charts.type) _charts.type.destroy();
+    _charts.type = new Chart(document.getElementById('typeChart'), {
+      type: 'bar',
+      data: {
+        labels: typeLabels,
+        datasets: [{
+          label: 'Ort. Engagement %',
+          data: typeValues,
+          backgroundColor: ['#7c3aed','#db2777','#0284c7'],
+          borderRadius: 6,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#64748b' } },
+          y: { grid: { color: '#1e1e2e' }, ticks: { color: '#64748b', callback: v => v + '%' } }
+        }
+      }
+    });
+  }
+}
+
+// ── Growth tab ─────────────────────────────────────────────────────────────
+function renderGrowthTab({summary, weekly_delta, growth}) {
+  const acc = summary.account;
+
+  // avg engagement across all posts
+  const posts  = summary.posts || [];
+  const avgEng = posts.length ? (posts.reduce((a,p) => a + (p.engagement_rate||0), 0) / posts.length).toFixed(2) : 0;
+
+  document.getElementById('growthStats').innerHTML = [
+    { label:'Takipçi', value: fmt(acc.followers_count), delta: weekly_delta, accent:'#7c3aed' },
+    { label:'Haftalık Değişim', value: (weekly_delta >= 0 ? '+' : '') + fmt(weekly_delta), accent: weekly_delta >= 0 ? '#10b981' : '#ef4444' },
+    { label:'Ort. Engagement', value: pct(avgEng), accent:'#db2777' },
+    { label:'Reach (28g)', value: fmt(summary.reach_28d), accent:'#0284c7' },
+  ].map(c => `<div class="stat-card" style="--accent:${c.accent}">
+    <div class="stat-label">${c.label}</div>
+    <div class="stat-value">${c.value}</div>
+  </div>`).join('');
+
+  if (growth && growth.length > 0) {
+    const labels = growth.map(r => r.date);
+    const values = growth.map(r => r.followers);
+    if (_charts.growthBig) _charts.growthBig.destroy();
+    _charts.growthBig = new Chart(document.getElementById('growthBigChart'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Takipçi',
+          data: values,
+          borderColor: '#7c3aed',
+          backgroundColor: 'rgba(124,58,237,.15)',
+          fill: true, tension: .4,
+          pointRadius: 4, pointBackgroundColor: '#7c3aed',
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false },
+          tooltip: { callbacks: { label: ctx => ' ' + fmt(ctx.raw) + ' takipçi' } }
+        },
+        scales: {
+          x: { grid: { color: '#1e1e2e' }, ticks: { color: '#64748b', maxTicksLimit: 10 } },
+          y: { grid: { color: '#1e1e2e' }, ticks: { color: '#64748b', callback: v => fmt(v) } }
+        }
+      }
+    });
+  }
+}
+
+// ── Content tab ────────────────────────────────────────────────────────────
+let _currentSort = 'date';
+
+document.querySelectorAll('.sort-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    _currentSort = btn.dataset.sort;
+    renderContentTab();
+  });
+});
+
+function renderContentTab() {
+  if (!_summary) return;
+  const posts    = [...(_summary.posts || [])];
+  const grid     = document.getElementById('postsGrid');
+  const followers = _summary.account?.followers_count || 1;
+
+  if (!posts.length) { grid.innerHTML = '<div class="loading">Gönderi bulunamadı.</div>'; return; }
+
+  // sort
+  const sortFn = {
+    date:  (a,b) => new Date(b.timestamp) - new Date(a.timestamp),
+    er:    (a,b) => (b.engagement_rate||0) - (a.engagement_rate||0),
+    reach: (a,b) => (b.insights?.reach||0) - (a.insights?.reach||0),
+    views: (a,b) => (b.insights?.views||0) - (a.insights?.views||0),
+    saves: (a,b) => (b.insights?.saved||0) - (a.insights?.saved||0),
+  };
+  posts.sort(sortFn[_currentSort] || sortFn.date);
+
+  // compute averages for bars
+  const maxReach = Math.max(...posts.map(p => p.insights?.reach || 0), 1);
+  const maxViews = Math.max(...posts.map(p => p.insights?.views || 0), 1);
+  const maxSaves = Math.max(...posts.map(p => p.insights?.saved || 0), 1);
+  const maxShares= Math.max(...posts.map(p => p.insights?.shares|| 0), 1);
+  const avgEr    = posts.reduce((a,p) => a+(p.engagement_rate||0), 0) / posts.length;
+
+  // summary cards
+  const reels    = posts.filter(p => p.media_type === 'VIDEO');
+  const avgReach = Math.round(posts.reduce((a,p) => a+(p.insights?.reach||0), 0) / posts.length);
+  const avgViews = Math.round(reels.reduce((a,p) => a+(p.insights?.views||0), 0) / (reels.length||1));
+  const totalSaves = posts.reduce((a,p) => a+(p.insights?.saved||0), 0);
+
+  document.getElementById('contentSummary').innerHTML = [
+    { label:'Toplam Gönderi', value: posts.length, accent:'#7c3aed' },
+    { label:'Reels Sayısı', value: reels.length, accent:'#db2777' },
+    { label:'Ort. Reach', value: fmt(avgReach), accent:'#8b5cf6' },
+    { label:'Ort. Görüntüleme (Reel)', value: fmt(avgViews), accent:'#f472b6' },
+    { label:'Ort. Engagement', value: pct(avgEr.toFixed(2)), accent:'#10b981' },
+    { label:'Toplam Kaydetme', value: fmt(totalSaves), accent:'#34d399' },
+  ].map(c => `<div class="stat-card" style="--accent:${c.accent}">
+    <div class="stat-label">${c.label}</div>
+    <div class="stat-value" style="font-size:22px">${c.value}</div>
+  </div>`).join('');
+
+  grid.innerHTML = posts.map((post, rank) => {
+    const ins     = post.insights || {};
+    const er      = post.engagement_rate || 0;
+    const isVideo = post.media_type === 'VIDEO';
+    const isCarousel = post.media_type === 'CAROUSEL_ALBUM';
+    const typeClass = isVideo ? 'is-video' : isCarousel ? 'is-carousel' : 'is-image';
+    const badgeClass= isVideo ? 'badge-video' : isCarousel ? 'badge-carousel' : 'badge-image';
+    const typeLabel = isVideo ? 'Reel' : isCarousel ? 'Carousel' : 'Foto';
+    const date    = post.timestamp ? new Date(post.timestamp).toLocaleDateString('tr-TR', {day:'2-digit',month:'short',year:'2-digit'}) : '';
+    const caption = (post.caption || '').slice(0, 120);
+
+    const views   = ins.views   || 0;
+    const reach   = ins.reach   || 0;
+    const likes   = ins.likes   || post.like_count   || 0;
+    const comments= ins.comments|| post.comments_count|| 0;
+    const saves   = ins.saved   || 0;
+    const shares  = ins.shares  || 0;
+
+    const perfClass = er >= avgEr * 1.3 ? 'perf-top' : er <= avgEr * 0.6 ? 'perf-low' : 'perf-mid';
+    const perfLabel = er >= avgEr * 1.3 ? '▲ Top performans' : er <= avgEr * 0.6 ? '▼ Düşük' : '~ Ortalama';
+    const erClass2  = er >= avgEr * 1.3 ? 'er-high' : er <= avgEr * 0.6 ? 'er-low' : 'er-mid';
+
+    const bars = [
+      { label:'Reach',   val: reach,   max: maxReach,  color:'#9b59f5', num: fmt(reach) },
+      ...(isVideo ? [{ label:'Views', val: views, max: maxViews, color:'#f472b6', num: fmt(views) }] : []),
+      { label:'Saves',   val: saves,   max: maxSaves,  color:'#34d399', num: fmt(saves) },
+      { label:'Shares',  val: shares,  max: maxShares, color:'#f59e0b', num: fmt(shares) },
+    ];
+
+    return `<div class="post-card ${typeClass}">
+      <div class="post-inner">
+        <div class="post-left">
+          <div class="post-top">
+            <span class="post-type-badge ${badgeClass}">${typeLabel}</span>
+            <span class="post-date">${date}</span>
+            ${post.permalink ? `<a class="post-link" href="${post.permalink}" target="_blank">↗ Gönderiye git</a>` : ''}
+          </div>
+          ${caption ? `<div class="post-caption">${caption}${caption.length >= 120 ? '…' : ''}</div>` : ''}
+          <div class="post-metrics-row">
+            ${isVideo ? `<div class="metric-item"><span class="metric-icon">▶</span><span class="metric-value views-val">${fmt(views)}</span><span class="metric-label">Görüntüleme</span></div>` : ''}
+            <div class="metric-item"><span class="metric-icon">👁</span><span class="metric-value reach-val">${fmt(reach)}</span><span class="metric-label">Reach</span></div>
+            <div class="metric-item"><span class="metric-icon">❤️</span><span class="metric-value">${fmt(likes)}</span><span class="metric-label">Beğeni</span></div>
+            <div class="metric-item"><span class="metric-icon">💬</span><span class="metric-value">${fmt(comments)}</span><span class="metric-label">Yorum</span></div>
+            <div class="metric-item"><span class="metric-icon">🔖</span><span class="metric-value save-val">${fmt(saves)}</span><span class="metric-label">Kaydet</span></div>
+            <div class="metric-item"><span class="metric-icon">📤</span><span class="metric-value">${fmt(shares)}</span><span class="metric-label">Paylaş</span></div>
+          </div>
+          <div class="post-bars">
+            ${bars.map(b => `<div class="bar-row">
+              <span class="bar-label">${b.label}</span>
+              <div class="bar-track"><div class="bar-fill" style="width:${b.max>0?Math.round(b.val/b.max*100):0}%;background:${b.color}"></div></div>
+              <span class="bar-num">${b.num}</span>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div class="post-right">
+          <div class="er-badge ${erClass2}">${pct(er)}</div>
+          <div class="er-label">Eng. Rate</div>
+          <span class="perf-tag ${perfClass}">${perfLabel}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── AI Advisor ─────────────────────────────────────────────────────────────
+document.getElementById('generateBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('generateBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Analiz ediliyor...';
+  document.getElementById('aiLoading').style.display = 'flex';
+  document.getElementById('aiResult').style.display  = 'none';
+  document.getElementById('aiError').style.display   = 'none';
+
+  try {
+    const res  = await fetch('/api/analyze', {method:'POST'});
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error);
+    _lastAiResult = json.result;
+    renderAI(json.result);
+    document.getElementById('aiResult').style.display = 'block';
+    document.getElementById('aiExportBtn').style.display = 'inline-flex';
+  } catch(e) {
+    const el = document.getElementById('aiError');
+    el.style.display  = 'block';
+    el.textContent = 'Hata: ' + e.message;
+  } finally {
+    document.getElementById('aiLoading').style.display = 'none';
+    btn.disabled = false;
+    btn.innerHTML = '<span>✨</span> Yeniden Analiz Et';
+  }
+});
+
+function renderAI(result) {
+  const wrap = document.getElementById('advisorWrap');
+
+  wrap.innerHTML = `
+    <div class="advisor-box">
+      <div class="advisor-title">📊 Performans Analizi</div>
+      ${result.best_posting_time ? `<div class="best-time-box">⏰ Önerilen paylaşım saati: <strong>${result.best_posting_time}</strong></div>` : ''}
+      <div class="analysis-text">${result.analysis || '—'}</div>
+    </div>
+    <div class="advisor-box">
+      <div class="advisor-title">🚀 Büyüme Tavsiyeleri</div>
+      <ul class="tip-list">
+        ${(result.growth_tips || []).map((tip, i) =>
+          `<li class="tip-item"><span class="tip-num">${i+1}</span><span>${tip}</span></li>`
+        ).join('')}
+      </ul>
+    </div>
+  `;
+
+  const ideas = result.ideas || [];
+  document.getElementById('ideaCards').innerHTML = ideas.map((idea, i) => {
+    const header_color = ['#7c3aed','#db2777','#0284c7','#7c3aed','#db2777'][i];
+    return `<div class="idea-card">
+      <div class="idea-header" style="background:${header_color}1a;border-bottom:1px solid ${header_color}33">
+        <div style="font-weight:700;font-size:13px;">Fikir ${i+1}</div>
+        ${ideaFormatBadge(idea.format || '')}
+      </div>
+      <div class="idea-body">
+        <div class="idea-title">${idea.title || ''}</div>
+        <div class="idea-hook">"${idea.hook || ''}"</div>
+        <ul class="idea-points">
+          ${(idea.key_points || []).map(p => `<li>${p}</li>`).join('')}
+        </ul>
+        <div class="idea-caption">${idea.caption || ''}</div>
+        <div class="idea-hashtags">${(idea.hashtags || []).join(' ')}</div>
+        <div class="idea-cta">➡ ${idea.cta || ''}</div>
+        ${idea.why_it_works ? `<div class="idea-why">💡 ${idea.why_it_works}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── 75 HARD badge ───────────────────────────────────────────────────────────
+function checkHard75() {
+  if (!_summary) return;
+  // Read from accounts.json via API or derive from sidebar
+  // For now show if backend mentions it in type_stats or growth
+  // We'll check via a hidden attribute set by Flask via template
+}
+
+// ── Explore ────────────────────────────────────────────────────────────────
+document.getElementById('exploreBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('exploreBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Analiz ediliyor...';
+  document.getElementById('exploreLoading').style.display = 'flex';
+  document.getElementById('exploreResult').style.display  = 'none';
+  document.getElementById('exploreError').style.display   = 'none';
+
+  try {
+    const res  = await fetch('/api/explore', {method:'POST'});
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error);
+    _lastExploreResult = json.result;
+    renderExplore(json.result);
+    document.getElementById('exploreResult').style.display = 'block';
+    document.getElementById('exploreExportBtn').style.display = 'inline-flex';
+  } catch(e) {
+    const el = document.getElementById('exploreError');
+    el.style.display = 'block';
+    el.textContent = 'Hata: ' + e.message;
+  } finally {
+    document.getElementById('exploreLoading').style.display = 'none';
+    btn.disabled = false;
+    btn.innerHTML = '<span>🔍</span> Yeniden Analiz Et';
+  }
+});
+
+function renderExplore(result) {
+  const fmtMap = { VIDEO:'Reel', CAROUSEL_ALBUM:'Carousel', IMAGE:'Foto' };
+
+  // ── Weekly plan ──────────────────────────────────────────────────────────
+  const plan = result.weekly_plan || [];
+  document.getElementById('weekGrid').innerHTML = plan.map(day => {
+    const pot = (day.explore_potential || '').toLowerCase();
+    const potClass = pot.includes('yuk') ? 'potential-high' : pot.includes('ort') ? 'potential-mid' : 'potential-low';
+    const potBadge = pot.includes('yuk') ? 'pot-high' : pot.includes('ort') ? 'pot-mid' : 'pot-low';
+    const potLabel = pot.includes('yuk') ? '▲ Yüksek' : pot.includes('ort') ? '~ Orta' : '▼ Düşük';
+    const f = (day.format || '').toLowerCase();
+    const fmtCls = f.includes('reel') ? 'fmt-reel' : f.includes('carousel') ? 'fmt-carousel' : 'fmt-story';
+    const dateStr = day.date ? new Date(day.date).toLocaleDateString('tr-TR',{day:'2-digit',month:'short'}) : '';
+
+    return `<div class="week-card ${potClass}">
+      <div class="week-day">${day.day || ''}</div>
+      <div class="week-date">${dateStr}</div>
+      <span class="week-fmt idea-format ${fmtCls}">${day.format || ''}</span>
+      <div class="week-title">${day.title || day.topic || ''}</div>
+      <div class="week-hook">"${day.hook || ''}"</div>
+      ${day.explore_reason ? `<div class="week-reason">💡 ${day.explore_reason}</div>` : ''}
+      <div class="week-time" style="margin-top:auto">
+        <span class="week-potential ${potBadge}">${potLabel}</span>
+        ${day.best_time ? `<span style="color:var(--muted);font-size:10px;margin-left:6px">⏰ ${day.best_time}</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── Explore posts ────────────────────────────────────────────────────────
+  const explores = result.explore_posts || [];
+  if (explores.length === 0) {
+    document.getElementById('explorePosts').innerHTML =
+      '<div style="color:var(--muted);font-size:13px;">Henüz keşfete giren içerik tespit edilemedi. Daha fazla içerik paylaştıkça bu bölüm dolmaya başlayacak.</div>';
+  } else {
+    document.getElementById('explorePosts').innerHTML = explores.slice(0,6).map(post => {
+      const ins  = post.insights || {};
+      const type = fmtMap[post.media_type] || 'Reel';
+      const f    = post.media_type === 'VIDEO' ? 'fmt-reel' : post.media_type === 'CAROUSEL_ALBUM' ? 'fmt-carousel' : 'fmt-story';
+      const cap  = (post.caption || '').slice(0, 80);
+      return `<div class="explore-post">
+        <div class="explore-post-left">
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="idea-format ${f}" style="font-size:10px">${type}</span>
+            ${post.permalink ? `<a class="post-link" href="${post.permalink}" target="_blank">↗</a>` : ''}
+          </div>
+          ${cap ? `<div class="explore-caption">${cap}…</div>` : ''}
+          <div class="explore-metrics">
+            <span class="explore-metric">👁 ${fmt(ins.reach||0)}</span>
+            ${ins.views ? `<span class="explore-metric">▶ ${fmt(ins.views)}</span>` : ''}
+            <span class="explore-metric">🔖 ${fmt(ins.saved||0)}</span>
+            <span class="explore-metric">📤 ${fmt(ins.shares||0)}</span>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div class="explore-ratio">${post.reach_ratio}x</div>
+          <div class="explore-ratio-label">reach oranı</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Trending topics ──────────────────────────────────────────────────────
+  const trends = result.trending_topics || [];
+  document.getElementById('trendingTopics').innerHTML = trends.map(t => {
+    const f = (t.format || '').toLowerCase();
+    const fmtCls = f.includes('reel') ? 'fmt-reel' : f.includes('carousel') ? 'fmt-carousel' : 'fmt-story';
+    return `<div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:700">${t.topic}</span>
+        <span class="idea-format ${fmtCls}" style="font-size:10px">${t.format}</span>
+      </div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.5">${t.why}</div>
+    </div>`;
+  }).join('');
+
+  // ── Viral rules ──────────────────────────────────────────────────────────
+  const rules = result.viral_rules || [];
+  const icons = ['🎯','⚡','🔥','💡','🚀'];
+  document.getElementById('viralRules').innerHTML = rules.map((r, i) =>
+    `<li class="rule-item"><span class="rule-icon">${icons[i] || '▸'}</span><span>${r}</span></li>`
+  ).join('');
+
+  // ── Analysis ─────────────────────────────────────────────────────────────
+  document.getElementById('exploreAnalysis').textContent = result.analysis || '—';
+}
+
+// ── PDF Export ──────────────────────────────────────────────────────────────
+async function exportPdf(type) {
+  const data    = type === 'advisor' ? _lastAiResult : _lastExploreResult;
+  const btnId   = type === 'advisor' ? 'aiExportBtn' : 'exploreExportBtn';
+  const endpoint = `/api/export/${type}`;
+  if (!data) return;
+  const btn = document.getElementById(btnId);
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Hazırlanıyor...';
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('PDF oluşturulamadı');
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = res.headers.get('Content-Disposition')?.match(/filename="?([^"]+)"?/)?.[1]
+                 || `${type}-${new Date().toISOString().slice(0,10)}.pdf`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch(e) {
+    alert('PDF indirilemedi: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span>📄</span> PDF İndir';
+  }
+}
+
+// ── Init ────────────────────────────────────────────────────────────────────
+loadStats();
+</script>
+</body>
+</html>

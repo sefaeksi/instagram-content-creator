@@ -5,10 +5,12 @@
     "send_email": false,
     "niche": "Yasam Tarzi ve Kisisel Gelisim",
     "language": "Turkish",
-    "bio": "Kisisel gelisim, uretkenlik ve yasam tarzi icerikleri",
-    "content_style": "Motivasyonel, samimi, egitici; BTS rutinler, pratik ipuclari, ozgelisim tavsiyeleri",
-    "target_audience": "20-35 yas arasi, kisisel gelisim ve yasam tarzi meraklilari",
+    "bio": "SAP danismani, sporcu, Istanbul'da yasayan biri. Gunluk hayatini ve donusumunu paylasan.",
+    "content_style": "Vlog onceklikli, samimi, kisisel deneyimden anlatan, performatif olmayan",
+    "target_audience": "20-35 yas, beyaz yaka calisanlar, spor yapanlar, kisisel gelisim meraklilari",
     "typical_formats": ["Reel", "Carousel", "Story"],
-    "hard75_start_date": null
+    "hard75_start_date": null,
+    "current_life_context": "2 yillik iliski bu hafta bitti. Spor tam hizliyla devam ediyor — haftada 9 antrenman: Pazartesi/Sali/Persembe/Cuma gym, Carsamba ve Cumartesi kosu kulubu. Ofise Sali ve Carsamba gidiyor. SAP danismani olarak ofis + remote karma hayat suruyor. Son okunan kitap: Rezonans Kanunu.",
+    "recent_topics_used": []
   }
 ]
