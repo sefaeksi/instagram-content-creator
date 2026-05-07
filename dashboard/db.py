@@ -15,26 +15,34 @@ def _use_kv():
 
 # ── Upstash REST helpers ──────────────────────────────────────────────────────
 
-def _kv_get(key: str):
+def _kv_pipeline(commands: list):
+    """Execute Upstash Redis commands via pipeline endpoint."""
     import urllib.request
-    url   = os.getenv("KV_REST_API_URL").rstrip("/") + f"/get/{key}"
+    url   = os.getenv("KV_REST_API_URL").rstrip("/") + "/pipeline"
     token = os.getenv("KV_REST_API_TOKEN")
-    req   = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
-    with urllib.request.urlopen(req) as r:
-        body = json.loads(r.read())
-    return body.get("result")  # None if key missing
-
-
-def _kv_set(key: str, value):
-    import urllib.request
-    url   = os.getenv("KV_REST_API_URL").rstrip("/") + f"/set/{key}"
-    token = os.getenv("KV_REST_API_TOKEN")
-    data  = json.dumps(value).encode()
+    data  = json.dumps(commands).encode()
     req   = urllib.request.Request(url, data=data, method="POST",
                                    headers={"Authorization": f"Bearer {token}",
                                             "Content-Type": "application/json"})
-    with urllib.request.urlopen(req):
-        pass
+    with urllib.request.urlopen(req) as r:
+        return json.loads(r.read())
+
+
+def _kv_get(key: str):
+    results = _kv_pipeline([["GET", key]])
+    raw = results[0].get("result") if results else None
+    if raw is None:
+        return None
+    if isinstance(raw, str):
+        try:
+            return json.loads(raw)
+        except Exception:
+            return raw
+    return raw
+
+
+def _kv_set(key: str, value):
+    _kv_pipeline([["SET", key, json.dumps(value)]])
 
 
 # ── SQLite helpers ────────────────────────────────────────────────────────────
