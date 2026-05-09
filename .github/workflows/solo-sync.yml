@@ -1,0 +1,32 @@
+name: Solo Leveling Auto Sync
+
+on:
+  schedule:
+    - cron: "0 7 * * *"   # 10:00 Turkey time
+    - cron: "0 13 * * *"  # 16:00 Turkey time
+    - cron: "0 19 * * *"  # 22:00 Turkey time
+  workflow_dispatch:       # manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests python-dotenv upstash-redis
+
+      - name: Run Solo Sync
+        env:
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
+          KV_REST_API_URL:        ${{ secrets.KV_REST_API_URL }}
+          KV_REST_API_TOKEN:      ${{ secrets.KV_REST_API_TOKEN }}
+        run: python dashboard/solo_sync.py

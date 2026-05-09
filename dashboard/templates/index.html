@@ -1319,7 +1319,13 @@ function soloRender(key) {
   document.getElementById('soloNextWeek').disabled = isThisWeek;
 
   // Streak
-  document.getElementById('soloStreak').textContent = '';
+  if (_soloData.last_synced) {
+    const ago = Math.round((Date.now() - new Date(_soloData.last_synced)) / 60000);
+    const agoTxt = ago < 60 ? `${ago} dk önce` : `${Math.round(ago/60)} saat önce`;
+    document.getElementById('soloStreak').textContent = `🔄 Son sync: ${agoTxt}`;
+  } else {
+    document.getElementById('soloStreak').textContent = '⏳ Henüz sync yapılmadı';
+  }
 
   // Progress
   const { done, total } = soloScore(_soloData);
@@ -1358,6 +1364,22 @@ function soloRenderSimple(cardKey) {
 
   const noteInput = document.querySelector(`.solo-note-input[data-key="${cardKey}"]`);
   if (noteInput) noteInput.value = data.note || '';
+
+  // show API info below buttons
+  const cardEl  = document.getElementById('card-' + cardKey);
+  if (!cardEl) return;
+  let infoEl = cardEl.querySelector('.solo-api-info');
+  if (!infoEl) {
+    infoEl = document.createElement('div');
+    infoEl.className = 'solo-api-info';
+    infoEl.style.cssText = 'font-size:11px;color:var(--muted);margin-top:8px;display:flex;gap:8px;align-items:center';
+    cardEl.querySelector('.solo-card-body').appendChild(infoEl);
+  }
+  if (data.source === 'api' && data.date) {
+    infoEl.innerHTML = `📷 ${data.date.slice(5)} tarihinde paylaşıldı${data.permalink ? ` • <a href="${data.permalink}" target="_blank" style="color:#a78bfa">Gör</a>` : ''}`;
+  } else {
+    infoEl.innerHTML = '';
+  }
 }
 
 function soloRenderReels(key) {
@@ -1368,13 +1390,18 @@ function soloRenderReels(key) {
 
   slot.innerHTML = reels.map((r, i) => `
     <div class="solo-reel-slot ${r.status}">
-      <select data-reel="${i}" class="reel-status-sel">
+      ${r.source === 'api' ? '<span title="Instagram\'dan otomatik" style="font-size:10px;opacity:.6">📷</span>' : ''}
+      <select data-reel="${i}" class="reel-status-sel" ${r.source==='api'?'disabled':''}>
         <option value="pending" ${r.status==='pending'?'selected':''}>⏳</option>
         <option value="done"    ${r.status==='done'   ?'selected':''}>✓</option>
         <option value="skip"    ${r.status==='skip'   ?'selected':''}>✕</option>
       </select>
-      <input data-reel="${i}" class="reel-note-inp" value="${r.note||''}" placeholder="Konu..." />
-      <button class="solo-reel-remove" data-reel="${i}">×</button>
+      <span style="font-size:11px;color:var(--muted);min-width:40px">${r.date ? r.date.slice(5) : ''}</span>
+      ${r.permalink
+        ? `<a href="${r.permalink}" target="_blank" style="font-size:11px;color:#a78bfa;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.note||'Reel'}</a>`
+        : `<input data-reel="${i}" class="reel-note-inp" value="${r.note||''}" placeholder="Konu..." />`
+      }
+      ${r.source !== 'api' ? `<button class="solo-reel-remove" data-reel="${i}">×</button>` : ''}
     </div>
   `).join('');
 
