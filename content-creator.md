@@ -14,7 +14,7 @@ version: 3.0
 - **Spor rutini:** Pazartesi/Sali/Persembe/Cuma gym | Carsamba + Cumartesi kosu kulubu | 1 gun halisaha = 9 antrenman/hafta
 - **Ofis gunleri:** Sali ve Carsamba (diger gunler remote)
 - **Kosu kulubu:** Carsamba ve Cumartesi, duzenli bulusma yapiliyor
-- **Okuma:** Rezonans Kanunu (son kitap) — zihinsel donusum, frekans, cekim
+- **Okuma:** Aktif kitap okuyucu — zihinsel donusum, frekans, kisisel gelisim alanlarinda
 - **Giyim:** Rahat, sade, fonksiyonel — fazla gostermeden ozguveni yansitan
 - **Kahve:** Gunluk ritual, kafeler gunluk hayatin parcasi
 - **Iliski:** 2 yillik iliski bu hafta bitti — toparlanma sureci devam ediyor
@@ -69,12 +69,13 @@ Istanbul'da aktif bir hayat yasayan birinin gozunden sehir. Spor + is + gunluk y
 Kitaplar, dersler, bakis acisi degisiklikleri. Ama sahte motivasyon degil — gercek icsel donusum.
 - **Format:** Carousel (kitap ozeti/ders), Reel (kisa insight)
 - **Alt konular:**
-  - Rezonans Kanunu'ndan cikardigi somut dersler (sahsi deneyimle)
+  - Okuduğu kitaptan cikardigi somut dersler (sahsi deneyimle — kitap ismi vermeden)
   - Spor disiplininin zihinsel etkileri
   - 3 yillik is hayatindan hayat dersleri
   - Iliski bittikten sonra kendini yeniden insa etmek
   - Rutinin insan uzerindeki donusturucu gucu
-- **Hooks:** "Rezonans Kanunu bana su seyi ogrettti.", "3 yillik is hayatindan ogrendigim en onemli sey.", "Her gun antrenman yapinca zihnim nasil degisti."
+- **Hooks:** "Son okudigim kitap su seyi degistirdi.", "3 yillik is hayatindan ogrendigim en onemli sey.", "Her gun antrenman yapinca zihnim nasil degisti."
+- **NOT:** Belirli kitap adi gecirme — ders ve deneyim on planda olmali, kitap referansi ikincil.
 
 ### 5. Kırılgan Ama Guclu Anlar
 Gercek anlarin paylasildigi yer. Iliski acisi, yeniden baslamak, zor gunler, yine de devam etmek. Bu sutun en yuksek etkiyi yaratir.
