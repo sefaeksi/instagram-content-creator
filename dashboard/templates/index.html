@@ -232,6 +232,33 @@
   .best-time-box { background: rgba(124,58,237,.1); border: 1px solid rgba(124,58,237,.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; font-size: 13px; }
   .best-time-box strong { color: var(--purple-l); }
 
+  /* ── Reel Idea Generator ── */
+  .reel-gen-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-top: 28px; }
+  .reel-gen-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .reel-gen-sub { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+  .reel-gen-input-row { display: flex; gap: 10px; align-items: flex-end; }
+  .reel-gen-textarea {
+    flex: 1; background: rgba(255,255,255,.04); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); font-size: 13px; padding: 10px 14px;
+    resize: vertical; min-height: 64px; font-family: inherit; outline: none;
+    transition: border-color .15s;
+  }
+  .reel-gen-textarea:focus { border-color: var(--purple); }
+  .reel-gen-textarea::placeholder { color: var(--muted); }
+  .reel-gen-btn {
+    padding: 10px 20px; background: linear-gradient(135deg, var(--purple), var(--pink));
+    border: none; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 700;
+    cursor: pointer; transition: opacity .15s; white-space: nowrap; display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+  }
+  .reel-gen-btn:hover    { opacity: .85; }
+  .reel-gen-btn:disabled { opacity: .5; cursor: not-allowed; }
+  .reel-gen-insight { background: rgba(124,58,237,.08); border: 1px solid rgba(124,58,237,.25); border-radius: 8px; padding: 12px 16px; margin: 14px 0 18px; font-size: 13px; line-height: 1.6; color: var(--text); }
+  .reel-gen-insight::before { content: '💡 '; }
+  .idea-angle   { font-size: 11px; color: var(--yellow); font-weight: 600; margin-bottom: 6px; }
+  .idea-visual  { font-size: 11px; color: var(--muted); margin-top: 6px; padding: 8px 10px; background: rgba(255,255,255,.02); border-radius: 5px; border-left: 2px solid var(--purple); }
+  .idea-trend   { font-size: 11px; color: #f59e0b; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); font-weight: 600; }
+  .idea-trend::before { content: '🔥 '; }
+
   /* ── Explore ── */
   .explore-grid   { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
   .explore-box    { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
@@ -464,6 +491,22 @@
         <div style="margin-top:20px">
           <div style="font-size:15px;font-weight:700;margin-bottom:14px;">🎯 Veriye Dayalı İçerik Fikirleri</div>
           <div class="idea-cards" id="ideaCards"></div>
+        </div>
+      </div>
+
+      <!-- ── Reel Fikir Üretici ── -->
+      <div class="reel-gen-box">
+        <div class="reel-gen-title">🎬 Reel Fikir Üretici</div>
+        <div class="reel-gen-sub">Aklındaki konuyu veya içerik fikrini yaz — sana özel 5 detaylı, trendlere girebilecek reel fikri üretelim.</div>
+        <div class="reel-gen-input-row">
+          <textarea id="reelGenInput" class="reel-gen-textarea" placeholder="Örnek: sabah rutini, kitap önerisi, 75 HARD 30. gün, günlük planlama, öğrenci hayatı..."></textarea>
+          <button id="reelGenBtn" class="reel-gen-btn"><span>✨</span> Fikir Üret</button>
+        </div>
+        <div id="reelGenLoading" style="display:none;margin-top:14px" class="loading"><div class="spinner"></div> Gemini reel fikirleri üretiyor...</div>
+        <div id="reelGenError"   style="display:none;margin-top:14px" class="error-box"></div>
+        <div id="reelGenResult"  style="display:none">
+          <div id="reelGenInsight" class="reel-gen-insight"></div>
+          <div class="idea-cards" id="reelGenCards"></div>
         </div>
       </div>
     </div>
@@ -1033,6 +1076,71 @@ function renderAI(result) {
     </div>`;
   }).join('');
 }
+
+// ── Reel Fikir Üretici ──────────────────────────────────────────────────────
+function renderReelIdeas(result) {
+  document.getElementById('reelGenInsight').textContent = result.topic_insight || '';
+  const ideas = result.ideas || [];
+  const colors = ['#7c3aed','#db2777','#0284c7','#10b981','#f59e0b'];
+  document.getElementById('reelGenCards').innerHTML = ideas.map((idea, i) => {
+    const c = colors[i % colors.length];
+    return `<div class="idea-card">
+      <div class="idea-header" style="background:${c}1a;border-bottom:1px solid ${c}33">
+        <div style="font-weight:700;font-size:13px;">Fikir ${i+1}</div>
+        <span class="idea-format fmt-reel">Reel</span>
+      </div>
+      <div class="idea-body">
+        <div class="idea-title">${idea.title || ''}</div>
+        ${idea.angle ? `<div class="idea-angle">📐 ${idea.angle}</div>` : ''}
+        <div class="idea-hook">"${idea.hook || ''}"</div>
+        <ul class="idea-points">
+          ${(idea.key_points || []).map(p => `<li>${p}</li>`).join('')}
+        </ul>
+        ${idea.visual_direction ? `<div class="idea-visual">🎥 ${idea.visual_direction}</div>` : ''}
+        <div class="idea-caption" style="margin-top:10px">${idea.caption || ''}</div>
+        <div class="idea-hashtags">${(idea.hashtags || []).join(' ')}</div>
+        <div class="idea-cta">➡ ${idea.cta || ''}</div>
+        ${idea.trend_reason ? `<div class="idea-trend">${idea.trend_reason}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('reelGenBtn').addEventListener('click', async () => {
+  const topic = document.getElementById('reelGenInput').value.trim();
+  if (!topic) { document.getElementById('reelGenInput').focus(); return; }
+  const btn = document.getElementById('reelGenBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Üretiyor...';
+  document.getElementById('reelGenLoading').style.display = 'flex';
+  document.getElementById('reelGenResult').style.display  = 'none';
+  document.getElementById('reelGenError').style.display   = 'none';
+  try {
+    const res  = await fetch('/api/reel-ideas', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({topic}),
+    });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error);
+    renderReelIdeas(json.result);
+    document.getElementById('reelGenResult').style.display = 'block';
+  } catch(e) {
+    const el = document.getElementById('reelGenError');
+    el.style.display = 'block';
+    el.textContent = 'Hata: ' + e.message;
+  } finally {
+    document.getElementById('reelGenLoading').style.display = 'none';
+    btn.disabled = false;
+    btn.innerHTML = '<span>✨</span> Fikir Üret';
+  }
+});
+
+document.getElementById('reelGenInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+    document.getElementById('reelGenBtn').click();
+  }
+});
 
 // ── 75 HARD badge ───────────────────────────────────────────────────────────
 function checkHard75() {

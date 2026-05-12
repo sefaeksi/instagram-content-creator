@@ -159,3 +159,76 @@ ideas dizisinde tam olarak 5 fikir olsun. Performans verisine dayanarak en yukse
             last_err = e
             continue
     raise last_err
+
+
+def generate_reel_ideas(topic: str) -> dict:
+    """
+    Generates 5 detailed, trend-worthy reel ideas for a given topic.
+    Returns: { "ideas": [...] }
+    """
+    client  = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+    context = _load_context()
+    today   = datetime.now().strftime("%d %B %Y, %A")
+
+    accounts_data = []
+    try:
+        accounts_data = json.loads(Path(__file__).parent.parent.joinpath("accounts.json").read_text(encoding="utf-8"))
+    except Exception:
+        pass
+    life_context  = next((a.get("current_life_context", "") for a in accounts_data if a.get("username") == "ssefaeksii"), "")
+    life_block    = f"\n--- GUNCEL HAYAT BAGLAMI ---\n{life_context}\n" if life_context else ""
+
+    prompt = f"""Sen @ssefaeksii icin Instagram reel icerik danismanisin.
+Bugun: {today}
+{life_block}
+HESAP KARAKTERI VE STRATEJI:
+{context}
+
+KULLANICININ VERDIGI KONU / ICERIK FIKRI:
+\"\"\"{topic}\"\"\"
+
+Bu konuya ozel, birbirinden farkli, trendlere girebilecek 5 REEL fikri uret.
+
+Her fikir:
+- Platformda viral olabilecek kadar dikkat cekici olmali
+- Ilk 3 saniye hook'u guclu olmali (kaydirmaya durduracak)
+- Hesabin kimligine uygun olmali
+- Birbirinin tekrari OLMAMALI — farkli acidan, farkli format veya farkli duygusal ton kullan
+- Eger konu 75 HARD programiyla ilgiliyse bunu entegre et, degilse zorla baglaMA
+
+Asagidaki JSON formatinda don. Markdown fence veya ekstra metin olmamali.
+TUM METINLER TURKCE OLMALI. Ingilizce klavye karakterleri kullan (ozel Turkce harf yok).
+
+{{
+  "topic_insight": "Bu konunun neden simdi trend potansiyeli tasidigi — 1-2 cumle Turkce analiz",
+  "ideas": [
+    {{
+      "format": "Reel",
+      "title": "Dikkat cekici Turkce baslik",
+      "hook": "Ilk 3 saniye hook — izleyiciyi durduracak guclu cumle",
+      "angle": "Bu fikri diger 4'ten ayiran yaklasim acisi",
+      "key_points": ["Madde 1", "Madde 2", "Madde 3", "Madde 4"],
+      "visual_direction": "Gorsel/cekis tarzi ve sahne icin somut tavsiye",
+      "caption": "Mikro-blog tarzinda IG SEO anahtar kelimeli Turkce caption",
+      "hashtags": ["#etiket1","#etiket2","#etiket3","#etiket4","#etiket5","#etiket6","#etiket7","#etiket8","#etiket9","#etiket10"],
+      "cta": "Harekete gecirici mesaj",
+      "trend_reason": "Neden su anda trend olabilir — guclu bir neden"
+    }}
+  ]
+}}
+
+ideas dizisinde tam olarak 5 fikir olsun. Fikirleri en trendden en yaratici/nicheye dogru sirala."""
+
+    models = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"]
+    last_err = None
+    for model in models:
+        try:
+            response = client.models.generate_content(model=model, contents=prompt)
+            raw = response.text.strip()
+            raw = re.sub(r"^```(?:json)?", "", raw).strip()
+            raw = re.sub(r"```$", "", raw).strip()
+            return json.loads(raw)
+        except Exception as e:
+            last_err = e
+            continue
+    raise last_err

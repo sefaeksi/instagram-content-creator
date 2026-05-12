@@ -15,7 +15,7 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 sys.path.insert(0, str(Path(__file__).parent))
 from instagram import InstagramAPI
 from db       import save_snapshot, get_growth_history, get_weekly_delta
-from advisor     import analyze
+from advisor     import analyze, generate_reel_ideas
 from explore     import generate_explore_plan
 from pdf_export  import build_advisor_pdf, build_explore_pdf
 
@@ -105,6 +105,19 @@ def api_analyze():
         ig      = InstagramAPI()
         summary = _cached("summary", ig.get_summary)
         result  = analyze(summary)
+        return jsonify({"ok": True, "result": result})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route("/api/reel-ideas", methods=["POST"])
+def api_reel_ideas():
+    try:
+        body  = request.get_json(force=True)
+        topic = (body.get("topic") or "").strip()
+        if not topic:
+            return jsonify({"ok": False, "error": "Konu boş bırakılamaz"}), 400
+        result = generate_reel_ideas(topic)
         return jsonify({"ok": True, "result": result})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
