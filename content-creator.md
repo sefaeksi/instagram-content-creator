@@ -122,7 +122,7 @@ Bu hesaplari analiz et, kopyalama — onlardan ogrenilen spesifik taktigi uygula
   - PR kirmak, hedef koymak, geri dusmek ve kalkmak
   - "Neden bu kadar cok antrenman yapiyorum" — zihinsel aciklama
   - Spor + is hayati dengesi — nasil mumkun oluyor
-- **Hooks:** "9 antrenman yaptigimda ofiste nasil hissediyorum.", "Bu sabah gitmek istemedim. Gittim. Iste fark.", "Haftada 9 kez antrenman yapan birinin kimsenin gormedigi tarafi."
+- **Hooks:** "Bu sabah gitmek istemedim. Gittim. Iste fark.", "Spor yaparken kimsenin konusmadigı bir sey var.", "Halisaha antrenmani her seyden farkli — iste nedeni."
 
 ### 2. SAP Danismani Hayati
 Beyaz yaka gercekligi — ofis, toplanti, proje, kahve arasi. Izleyicinin cogu bu hayati merak ediyor ya da yasıyor.
@@ -134,7 +134,7 @@ Beyaz yaka gercekligi — ofis, toplanti, proje, kahve arasi. Izleyicinin cogu b
   - Kariyer 3. yilinda neredeyim, nereye gidiyorum
   - Toplantidan kosa, kosan sonra tekrar ofise — ayni gun
   - Remote gun vs ofis gunu — fark ne
-- **Hooks:** "SAP danismani olarak gunde 3 toplanti varken kosu antrenmanima nasil yetisiyorum.", "3 yillik kariyer — simdi neredeyim.", "Ofis hayatinin kimsenin gostermedigi tarafi bu."
+- **Hooks:** "Ofis hayatinin kimsenin gostermedigi tarafi bu.", "3 yillik kariyer bana su seyi ogrettti.", "Remote gun vs ofis gunu — hangisi daha verimli, deneyimledim."
 
 ### 3. Istanbul Vlogu
 Istanbul'da aktif bir hayat yasayan birinin gozunden sehir. Spor + is + gunluk yasam.
@@ -157,7 +157,7 @@ Okumak, dusunmek, bakis acisi degistirmek. Sahte motivasyon degil — gercek ics
   - Iliski bittikten sonra kendini yeniden insa etmek
   - Rutinin insan uzerindeki donusturucu gucu — kendi orneginden
   - "X gunden ogrendiklerim" format — spesifik sure ve somut dersler
-- **Hooks:** "Son okuduğum kitap su seyi kalici olarak degistirdi.", "3 yillik is hayatindan ogrendigim en onemli sey bu.", "Her gun antrenman yapinca zihnim nasil degisti — somut ornekler."
+- **Hooks:** "Son okuduğum kitap su seyi kalici olarak degistirdi.", "Rutini oturtmanin kimsenin anlatmadigi tarafi bu.", "Zihinsel yorgunluk fiziksel yorgunluktan farkli — bunu yasayarak ogrendim."
 - **NOT:** Belirli kitap adi gecirme — ders ve kisisel deneyim on planda olsun.
 
 ### 5. Kirılgan Ama Guclu Anlar
@@ -170,7 +170,7 @@ Gercek anlarin paylasildigi yer. Iliski acisi, yeniden baslamak, zor gunler, yin
   - Kendine karsi durüst olmak
   - Yalniz olmak vs. yalniz hissetmek
   - Motivasyon olmadigi gunlerde ne oluyor — gercekci anlati
-- **Hooks:** "Bu hafta hayatimda buyuk bir sey degisti.", "Herkes iyi gunden bahsediyor, ben kotu gunumu anlatarim.", "Motivasyonum yoktu. Gittim. Iste ne oldu."
+- **Hooks:** "Bu hafta hayatimda buyuk bir sey degisti.", "Herkes iyi gunden bahsediyor, ben kotu gunumu anlatarim.", "Kendime karsi durüst olmanın ne kadar zor oldugunu simdi anlıyorum."
 
 ### 6. Challenge & Commit (Seri Format)
 Kendini bir seye adamak, bunu kamuoyuna acik yapmak ve hesap vermek. Seri format izleyicinin geri donmesini saglar.

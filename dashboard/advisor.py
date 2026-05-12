@@ -117,6 +117,13 @@ Tam olarak 5 fikir uret:
 - Fikir 4: Reel (farkli konu)
 - Fikir 5: Reel (farkli konu){hard75_rule}
 
+KRITIK KURALLAR — bunlara kesinlikle uy:
+1. HESAP KARAKTERI dosyasindaki ornek hook ve basliklar FORMAT ornegi olarak var — onlari kelimesi kelimesine KULLANMA. Tamamen farkli, taze fikirler uret.
+2. Bes fikrin hepsi FARKLI sutunlardan gelmeli. Ayni konuyu (ornegin spor veya antrenman) birden fazla fikirde kullanma.
+3. Performans verisine bak — hangi formatin engagement'i dusukse o formati farkli bir aci ile dene, hangisi yuksekse o formati once yaz.
+4. Gunun tarihi ve haftanin gununu dikkate al — o gune ozgu, o an icin mantikli fikirler uret.
+5. Fikirlerin baslik ve hook'lari bu hesaba ozgu olmali — baska bir hesapta da kullanilabilecek genel ifadeler olmamali.
+
 ---
 Asagidaki 4 blogu JSON olarak dondur. Markdown fence veya ekstra metin olmamali.
 TUM METINLER TURKCE OLMALI. Ingilizce klavye karakterleri kullan (ozel Turkce harf yok: s-cedilla, g-breve, u-umlaut, o-umlaut, dotless-i, c-cedilla).
@@ -133,8 +140,8 @@ Hicbir alan Ingilizce olmamali — analysis, growth_tips, title, hook, key_point
   "ideas": [
     {{
       "format": "Reel | Carousel | Story",
-      "title": "Turkce dikkat cekici baslik",
-      "hook": "Turkce ilk 3 saniye hook",
+      "title": "Turkce dikkat cekici baslik — bu hesaba ozgu, taze",
+      "hook": "Turkce ilk 3 saniye hook — kelimesi kelimesine orijinal",
       "key_points": ["Turkce madde1", "Turkce madde2", "Turkce madde3"],
       "caption": "Turkce mikro-blog tarzinda caption (IG SEO anahtar kelimeler iceriyor)",
       "hashtags": ["#etiket1","#etiket2","#etiket3","#etiket4","#etiket5","#etiket6","#etiket7","#etiket8","#etiket9","#etiket10"],
@@ -144,7 +151,7 @@ Hicbir alan Ingilizce olmamali — analysis, growth_tips, title, hook, key_point
   ]
 }}
 
-ideas dizisinde tam olarak 5 fikir olsun. Performans verisine dayanarak en yuksek engagement getirecek formatlari once yaz."""
+ideas dizisinde tam olarak 5 fikir olsun. Her fikir farkli bir sutundan (spor, is hayati, Istanbul, zihinsel donusum, kirılgan an, challenge) gelmeli."""
 
     models = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"]
     last_err = None
