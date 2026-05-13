@@ -64,7 +64,7 @@ Bu hesaplari analiz et, kopyalama — onlardan ogrenilen spesifik taktigi uygula
 - **Ton:** Extreme disiplin, saat 04:00 kalkis, her ani belgeleme
 - **Format:** "Morning routine" serisi — ayni format, her gun, tutarli yapi
 - **Ogrenilenler:** Seri format = geri donen izleyici. Reel sonu cliffhanger ya da devam eden anlati.
-- **Uygulanacak:** "9 antrenman haftasi" seri formatı. Her pazartesi gun 1, her cumartesi gun 6. Izleyici gunleri takip eder.
+- **Uygulanacak:** Haftalik spor rutinini seri formata don. Izleyici gunleri takip eder, her bolum bagimsiz ama seriye baglanır.
 
 ### 5. @bradleysimmonds (604K) — Spor + Profesyonel Hayat
 - **Niche:** Londra PT, gym + kariyer dengesi, British GQ trainer
@@ -78,7 +78,7 @@ Bu hesaplari analiz et, kopyalama — onlardan ogrenilen spesifik taktigi uygula
 - **Ton:** Raw, direkt, akademik alt yapi ama sade dil
 - **Format:** Konusarak anlatan Reel + carousel (ders ozeti)
 - **Ogrenilenler:** Erkeklerin ses cikarmadigı konuları acıkca konusmak = cok yuksek paylasim orani. Icimdeki soruyu dısarı vur.
-- **Uygulanacak:** "2 yillik iliski bitti" gercekligi, "bu kadar cok antrenman neden" sorusu — bunlar paylasım getirir.
+- **Uygulanacak:** "2 yillik iliski bitti" gercekligi, zor gunlerde devam etmek, kimsenin gormedigi hayatin arka yuzü — bunlar paylasım getirir.
 
 ### 7. @steven.bartlett (2M+) — Savunmasiz + Basarili
 - **Niche:** Girisimci hayati, kisisel gelisim, Diary of a CEO
@@ -91,7 +91,7 @@ Bu hesaplari analiz et, kopyalama — onlardan ogrenilen spesifik taktigi uygula
 - **Niche:** School of Greatness — eski sporcu, kisisel gelisim, is dunyasi
 - **Ton:** Ilham verici ama gercekci, deneyim bazli
 - **Format:** Kisa motivasyon Reel + carousel (5 ders formatı) + podcast snippet
-- **Ogrenilenler:** Spor geri plani + kisisel gelisim = credibility. "9 antrenman/hafta yapan birinden ogren" cok daha guvenilir.
+- **Ogrenilenler:** Spor geri plani + kisisel gelisim = credibility. Aktif hayat yasayan birinin tavsiyeleri daha inandirici.
 - **Uygulanacak:** Spor disiplini = is disiplini = hayat disiplini. Bu uclu her zaman icerige donusebilir.
 
 ### 9. @alex.sless (432K) — Gunluk Rutin Vlog
@@ -113,7 +113,7 @@ Bu hesaplari analiz et, kopyalama — onlardan ogrenilen spesifik taktigi uygula
 ## Icerik Sutunlari (6 Farkli Eksen)
 
 ### 1. Spor Makinesi
-9 antrenman/hafta yapan birinin gercek hayati. Sadece estetik degil — zihinsel savaslar, yorgunluk, yine de gitmek.
+Yogun spor rutiniyle yasayan birinin gercek hayati. Sadece estetik degil — zihinsel savaslar, yorgunluk, yine de gitmek.
 - **Format:** Reel (vlog kesiti), Story (gunluk check-in)
 - **Alt konular:**
   - Sabah antrenmani vlogu (saat 06:00-07:00 arasi Istanbul'da)
@@ -179,7 +179,7 @@ Kendini bir seye adamak, bunu kamuoyuna acik yapmak ve hesap vermek. Seri format
   - 75 HARD (aktif oldugunda — gun bazli gunluk icerik)
   - 30 gun challenge'lari — spor, uyku, dijital detoks, okuma
   - "X gun boyunca Y yaptim, iste sonuc" formatı
-  - Haftalik antrenman hesap verme — tamamlanan 9 antrenman recap
+  - Haftalik antrenman hesap verme — tamamlanan spor haftasi recap
   - "Simdi neredeyim" serisi — ayda bir ilerleme guncellemesi
 - **Hooks:** "Bugun X'in N. gunundeyim.", "Bu ay kendime bir taahhut verdim.", "Son 30 gunde su degisti."
 
@@ -204,9 +204,9 @@ Kendini bir seye adamak, bunu kamuoyuna acik yapmak ve hesap vermek. Seri format
 
 - **Ilk 3 saniye her seyi belirler:** Izleyicilerin %65'i ilk 2-3 saniyede izlemeyi bırakiyor ya da devam ediyor.
 - **Gorsel + Metin + Ses uclusu:** Ekranda 1 guclu cumle + sahneyi destekleyen ses + dikkat ceken gorsel acilıs.
-- **Sayi kullan:** "9 antrenman", "3 yil", "2 yillik", "saat 06:00", "30 gun" — rakamlar durduruyor.
+- **Sayi kullan:** "3 yil", "2 yillik", "saat 06:00", "30 gun", "haftada X kez" — rakamlar durduruyor.
 - **Catısma kur:** Spor + ofis, yorgunluk + devam etmek, iliski acisi + ilerleme, istemiyorum + gittim.
-- **Soru degil, ifade:** "Neden bu kadar cok spor yapiyorum?" yerine "9 antrenman yaptim — iste fark."
+- **Soru degil, ifade:** "Neden bu kadar cok spor yapiyorum?" yerine "Bu hafta her antrenmanı tamamladım — iste fark."
 - **Kisisel bas:** "Ben" ile basla, izleyiciye dokunan gerceklik ile bitir.
 - **En iyi anlara zıpla:** Reelin en sarsici/etkileyici karesi ile ac, ardindan anlat. Warm-up ile baslamak izleyiciyi kacırır.
 

@@ -106,7 +106,7 @@ EN IYI 3 GONDERI:
 IZLEYICI ONLINE SAATLERI:
 {online_txt}
 
-HESAP KARAKTERI VE STRATEJI:
+HESAP KARAKTERI VE STRATEJI (arka plan bilgisi — buradan icerik fikri kopyalama, sadece kisiyi anlaman icin):
 {context}
 
 --- ICERIK FIKIRLERI GOREVI ---
@@ -118,11 +118,12 @@ Tam olarak 5 fikir uret:
 - Fikir 5: Reel (farkli konu){hard75_rule}
 
 KRITIK KURALLAR — bunlara kesinlikle uy:
-1. HESAP KARAKTERI dosyasindaki ornek hook ve basliklar FORMAT ornegi olarak var — onlari kelimesi kelimesine KULLANMA. Tamamen farkli, taze fikirler uret.
-2. Bes fikrin hepsi FARKLI sutunlardan gelmeli. Ayni konuyu (ornegin spor veya antrenman) birden fazla fikirde kullanma.
-3. Performans verisine bak — hangi formatin engagement'i dusukse o formati farkli bir aci ile dene, hangisi yuksekse o formati once yaz.
-4. Gunun tarihi ve haftanin gununu dikkate al — o gune ozgu, o an icin mantikli fikirler uret.
-5. Fikirlerin baslik ve hook'lari bu hesaba ozgu olmali — baska bir hesapta da kullanilabilecek genel ifadeler olmamali.
+1. HESAP KARAKTERI dosyasi kisiyi tanimak icindir, icerik fikri kaynaği DEGILDIR. Oradaki ornek hook, baslik veya konu KULLANMA — kelimesi kelimesine kopyalamak yasak.
+2. "9 antrenman", "Rezonans Kanunu" gibi profil detaylarini icerik fikrine donusturme. Bunlar arka plan bilgisi.
+3. Bes fikrin hepsi FARKLI sutunlardan gelmeli: spor, is hayati, Istanbul, zihinsel donusum, kirılgan an — bunlardan her biri bir fikirde olmali.
+4. Performans verisine bak — hangi formatin engagement'i dusukse o formati farkli bir aci ile dene, hangisi yuksekse o formati once yaz.
+5. Gunun tarihi ve haftanin gununu dikkate al — o gune ozgu, o an icin mantikli fikirler uret.
+6. Fikirlerin baslik ve hook'lari bu hesaba ozgu olmali — baska bir hesapta da kullanilabilecek genel ifadeler olmamali.
 
 ---
 Asagidaki 4 blogu JSON olarak dondur. Markdown fence veya ekstra metin olmamali.
