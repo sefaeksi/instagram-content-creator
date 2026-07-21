@@ -1,4 +1,5 @@
 .env
+.env.vercel
 credentials.json
 token.json
 __pycache__/
@@ -7,3 +8,7 @@ __pycache__/
 sent_log.json
 dashboard/growth.db
 dashboard/__pycache__/
+.ig_session_*
+dashboard/.ig_session_*
+
+.vercel

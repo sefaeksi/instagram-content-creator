@@ -18,6 +18,8 @@ from db       import save_snapshot, get_growth_history, get_weekly_delta
 from advisor     import analyze, generate_reel_ideas
 from explore     import generate_explore_plan
 from pdf_export  import build_advisor_pdf, build_explore_pdf
+import instagram_scraper
+import research
 
 app = Flask(__name__)
 
@@ -187,6 +189,60 @@ def api_export_explore():
 
 
 import json as _json
+
+
+# ── Arastirma (LightReel-lite) ────────────────────────────────────────────────
+
+@app.route("/api/research/discover", methods=["POST"])
+def api_research_discover():
+    body    = request.get_json(force=True) or {}
+    hashtag = (body.get("hashtag") or "").strip().lstrip("#")
+    if not hashtag:
+        return jsonify({"ok": False, "error": "Hashtag gerekli."}), 400
+    try:
+        result = research.discover_creators(
+            hashtag,
+            int(body.get("min_followers") or 0),
+            int(body.get("max_followers") or 0),
+        )
+        return jsonify({"ok": True, "result": result})
+    except instagram_scraper.ScraperError as e:
+        return jsonify({"ok": False, "error": research.scraper_message(e)}), 502
+    except ValueError as e:
+        return jsonify({"ok": False, "error": str(e)}), 404
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route("/api/research/trend-chat", methods=["POST"])
+def api_research_trend_chat():
+    body     = request.get_json(force=True) or {}
+    question = (body.get("question") or "").strip()
+    hashtag  = (body.get("hashtag") or "").strip().lstrip("#")
+    if not question or not hashtag:
+        return jsonify({"ok": False, "error": "Soru ve hashtag gerekli."}), 400
+    try:
+        result = research.trend_chat(question, hashtag)
+        return jsonify({"ok": True, "result": result})
+    except instagram_scraper.ScraperError as e:
+        return jsonify({"ok": False, "error": research.scraper_message(e)}), 502
+    except ValueError as e:
+        return jsonify({"ok": False, "error": str(e)}), 404
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route("/api/research/analyze-script", methods=["POST"])
+def api_research_analyze_script():
+    body   = request.get_json(force=True) or {}
+    script = (body.get("script_text") or "").strip()
+    if not script:
+        return jsonify({"ok": False, "error": "Script metni gerekli."}), 400
+    try:
+        result = research.analyze_script(script, body.get("performance_notes") or "")
+        return jsonify({"ok": True, "result": result})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
 
 
 # ── Solo Leveling helpers ─────────────────────────────────────────────────────

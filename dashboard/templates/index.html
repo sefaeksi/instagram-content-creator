@@ -316,6 +316,68 @@
 
   .error-box { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); border-radius: 10px; padding: 16px; color: #fca5a5; font-size: 13px; }
 
+  /* ── Araştırma (LightReel-lite) ── */
+  .research-box   { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .research-title { font-size: 14px; font-weight: 700; color: var(--purple-l); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .research-sub   { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+  .research-form  { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+  .research-input {
+    flex: 1; min-width: 180px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 11px 14px; color: var(--text); font-size: 13px;
+    font-family: inherit; outline: none;
+  }
+  .research-input:focus, .research-textarea:focus { border-color: var(--purple); }
+  .research-input::placeholder, .research-textarea::placeholder { color: var(--muted); }
+  .research-input-sm { flex: 0 0 140px; min-width: 120px; }
+  .research-textarea {
+    width: 100%; min-height: 130px; resize: vertical; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px;
+    color: var(--text); font-size: 13px; font-family: inherit; line-height: 1.6;
+    outline: none; margin-bottom: 12px;
+  }
+  .research-textarea-sm { min-height: 70px; }
+  .research-meta { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+
+  .creator-row {
+    display: flex; align-items: center; gap: 14px; padding: 14px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; margin-bottom: 10px; flex-wrap: wrap;
+  }
+  .creator-main   { flex: 1; min-width: 200px; }
+  .creator-handle { font-size: 13px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px; }
+  .creator-name   { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .creator-reason { font-size: 12px; color: var(--text); line-height: 1.6; margin-top: 8px; opacity: .85; }
+  .creator-stats  { display: flex; gap: 16px; flex-wrap: wrap; }
+  .creator-stat       { text-align: center; min-width: 62px; }
+  .creator-stat-val   { font-size: 15px; font-weight: 700; color: var(--text); }
+  .creator-stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-top: 2px; }
+  .potential-badge {
+    font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: .5px; white-space: nowrap;
+  }
+  .pot-high { background: rgba(16,185,129,.15);  color: var(--green);  border: 1px solid rgba(16,185,129,.3); }
+  .pot-mid  { background: rgba(245,158,11,.15);  color: var(--yellow); border: 1px solid rgba(245,158,11,.3); }
+  .pot-low  { background: rgba(100,116,139,.15); color: var(--muted);  border: 1px solid rgba(100,116,139,.3); }
+  .verified-badge { font-size: 11px; color: #38bdf8; }
+
+  .trend-post {
+    padding: 12px 14px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; margin-bottom: 10px;
+  }
+  .trend-post-head    { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .trend-post-user    { font-size: 12px; font-weight: 700; color: var(--purple-l); }
+  .trend-post-stats   { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .trend-post-caption { font-size: 12px; color: var(--text); line-height: 1.6; opacity: .85; }
+
+  .script-score-wrap { display: flex; align-items: center; gap: 18px; margin-bottom: 18px; flex-wrap: wrap; }
+  .script-score {
+    font-size: 34px; font-weight: 800; color: var(--purple-l); min-width: 70px;
+    text-align: center; line-height: 1;
+  }
+  .script-score-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+  .script-score-bar   { width: 220px; max-width: 100%; height: 8px; background: var(--surface); border-radius: 4px; overflow: hidden; }
+  .script-score-fill  { height: 100%; width: 0; background: linear-gradient(90deg, var(--purple), var(--pink)); border-radius: 4px; transition: width .5s ease; }
+
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
@@ -417,6 +479,7 @@
       <div class="nav-item" data-tab="ai"><span class="icon">🤖</span> AI Danışman</div>
       <div class="nav-item" data-tab="explore"><span class="icon">🔍</span> Keşfet & Plan</div>
       <div class="nav-item" data-tab="solo"><span class="icon">⚡</span> Solo Leveling</div>
+      <div class="nav-item" data-tab="research"><span class="icon">🛰️</span> Araştırma</div>
     </nav>
     <div class="sidebar-footer">
       <button class="refresh-btn" id="refreshBtn">↻ Yenile</button>
@@ -672,6 +735,101 @@
 
     </div><!-- /#tab-solo -->
 
+    <!-- RESEARCH TAB -->
+    <div class="tab-panel" id="tab-research">
+
+      <!-- Creator keşfi -->
+      <div class="research-box">
+        <div class="research-title">🔎 Creator Keşfi</div>
+        <div class="research-sub">Bir hashtag altında paylaşım yapan gerçek hesapları tarar, takipçi filtresine göre listeler ve işbirliği potansiyeline göre sıralar.</div>
+        <div class="research-form">
+          <input class="research-input" id="discHashtag" placeholder="hashtag (ör. fitness)" />
+          <input class="research-input research-input-sm" id="discMin" type="number" min="0" placeholder="min takipçi" />
+          <input class="research-input research-input-sm" id="discMax" type="number" min="0" placeholder="max takipçi" />
+          <button class="explore-btn" id="discBtn"><span>🔎</span> Creator Bul</button>
+        </div>
+        <div id="discLoading" style="display:none" class="loading"><div class="spinner"></div> Instagram taranıyor...</div>
+        <div id="discError"   style="display:none" class="error-box"></div>
+        <div id="discResult"  style="display:none">
+          <div class="analysis-text" id="discSummary" style="margin-bottom:16px"></div>
+          <div id="discCreators"></div>
+        </div>
+      </div>
+
+      <!-- Trend & hook sohbeti -->
+      <div class="research-box">
+        <div class="research-title">💬 Trend & Hook Sohbeti</div>
+        <div class="research-sub">Sorunu gerçek hashtag verisiyle besleyip cevaplar. "Bu hashtag'te hangi hook'lar tutuyor?" gibi sorular sor.</div>
+        <div class="research-form">
+          <input class="research-input research-input-sm" id="trendHashtag" placeholder="hashtag" />
+          <input class="research-input" id="trendQuestion" placeholder="Sorun (ör. hangi formatlar en çok etkileşim alıyor?)" />
+          <button class="explore-btn" id="trendBtn"><span>💬</span> Sor</button>
+        </div>
+        <div id="trendLoading" style="display:none" class="loading"><div class="spinner"></div> Veri toplanıyor ve analiz ediliyor...</div>
+        <div id="trendError"   style="display:none" class="error-box"></div>
+        <div id="trendResult"  style="display:none">
+          <div class="research-meta" id="trendMeta"></div>
+          <div class="analysis-text" id="trendAnswer" style="margin-bottom:18px"></div>
+          <div class="explore-grid">
+            <div class="explore-box">
+              <div class="explore-title">📌 Gözlemler</div>
+              <ul class="rule-list" id="trendObservations"></ul>
+            </div>
+            <div class="explore-box">
+              <div class="explore-title">🪝 Hook Önerileri</div>
+              <ul class="rule-list" id="trendHooks"></ul>
+            </div>
+          </div>
+          <div class="explore-box" style="margin-top:16px">
+            <div class="explore-title">🔥 En Çok Etkileşim Alan Gönderiler</div>
+            <div id="trendTopPosts"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Script analizi -->
+      <div class="research-box">
+        <div class="research-title">🎬 Script Performans Analizi</div>
+        <div class="research-sub">Script veya caption metnini yapıştır, neden düşük performans gösterdiğini ve nasıl güçlendirileceğini analiz etsin. Instagram taraması gerektirmez.</div>
+        <textarea class="research-textarea" id="scriptText" placeholder="Video scripti veya caption metnini buraya yapıştır..."></textarea>
+        <textarea class="research-textarea research-textarea-sm" id="scriptNotes" placeholder="Performans notları (opsiyonel) — ör. 2.000 izlenme aldı, %1 etkileşim, ilk 3 saniyede %60 düşüş"></textarea>
+        <div class="research-form">
+          <button class="explore-btn" id="scriptBtn"><span>🎬</span> Analiz Et</button>
+        </div>
+        <div id="scriptLoading" style="display:none" class="loading"><div class="spinner"></div> Script analiz ediliyor...</div>
+        <div id="scriptError"   style="display:none" class="error-box"></div>
+        <div id="scriptResult"  style="display:none">
+          <div class="script-score-wrap">
+            <div class="script-score" id="scriptScore">—</div>
+            <div>
+              <div class="script-score-label">Performans Potansiyeli</div>
+              <div class="script-score-bar"><div class="script-score-fill" id="scriptScoreFill"></div></div>
+            </div>
+          </div>
+          <div class="analysis-text" id="scriptOverall" style="margin-bottom:18px"></div>
+          <div class="explore-box" style="margin-bottom:16px">
+            <div class="explore-title">🪝 Hook Analizi</div>
+            <div class="analysis-text" id="scriptHook"></div>
+          </div>
+          <div class="explore-grid">
+            <div class="explore-box">
+              <div class="explore-title">⚠️ Zayıf Noktalar</div>
+              <ul class="rule-list" id="scriptWeak"></ul>
+            </div>
+            <div class="explore-box">
+              <div class="explore-title">✅ İyileştirme Önerileri</div>
+              <ul class="rule-list" id="scriptImprovements"></ul>
+            </div>
+          </div>
+          <div class="explore-box" style="margin-top:16px">
+            <div class="explore-title">✨ Alternatif Hook Önerisi</div>
+            <div class="analysis-text" id="scriptAltHook"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /#tab-research -->
+
   </main>
 </div>
 
@@ -684,7 +842,7 @@ let _lastAiResult = null;
 let _lastExploreResult = null;
 
 // ── Tabs ───────────────────────────────────────────────────────────────────
-const TAB_TITLES = { overview:'Genel Bakış', growth:'Büyüme', content:'İçerik Analizi', ai:'AI Danışman', explore:'Keşfet & Plan', solo:'Solo Leveling ⚡' };
+const TAB_TITLES = { overview:'Genel Bakış', growth:'Büyüme', content:'İçerik Analizi', ai:'AI Danışman', explore:'Keşfet & Plan', solo:'Solo Leveling ⚡', research:'Araştırma 🛰️' };
 
 document.querySelectorAll('.nav-item').forEach(el => {
   el.addEventListener('click', () => {
@@ -1674,6 +1832,158 @@ document.querySelectorAll('.nav-item').forEach(item => {
     if (window.innerWidth <= 768) toggleSidebar(false);
   });
 });
+
+// ── Araştırma (LightReel-lite) ──────────────────────────────────────────────
+// Scraper'dan gelen caption'lar ve LLM metinleri güvenilmez — hepsi escape edilir.
+const escHtml = s => String(s ?? '').replace(/[&<>"']/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/** Ortak istek akışı: loading/error/result görünürlüğünü ve buton durumunu yönetir. */
+async function runResearch({ prefix, btnLabel, url, payload, validate, render }) {
+  const btn = document.getElementById(prefix + 'Btn');
+  const err = document.getElementById(prefix + 'Error');
+
+  const invalid = validate && validate();
+  if (invalid) {
+    err.style.display = 'block';
+    err.textContent = invalid;
+    return;
+  }
+
+  const original = btn.innerHTML;
+  btn.disabled  = true;
+  btn.innerHTML = '<div class="spinner"></div> Çalışıyor...';
+  document.getElementById(prefix + 'Loading').style.display = 'flex';
+  document.getElementById(prefix + 'Result').style.display  = 'none';
+  err.style.display = 'none';
+
+  try {
+    const res  = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload()),
+    });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error || 'Bilinmeyen hata');
+    render(json.result);
+    document.getElementById(prefix + 'Result').style.display = 'block';
+  } catch(e) {
+    err.style.display = 'block';
+    err.textContent = 'Hata: ' + e.message;
+  } finally {
+    document.getElementById(prefix + 'Loading').style.display = 'none';
+    btn.disabled  = false;
+    btn.innerHTML = original;
+  }
+}
+
+const potClass = p => /yüksek|yuksek|high/i.test(p) ? 'pot-high'
+                    : /orta|mid/i.test(p)           ? 'pot-mid'
+                    : 'pot-low';
+
+// ── Creator keşfi ───────────────────────────────────────────────────────────
+document.getElementById('discBtn').addEventListener('click', () => runResearch({
+  prefix: 'disc',
+  url: '/api/research/discover',
+  validate: () => document.getElementById('discHashtag').value.trim() ? null : 'Hashtag girmelisin.',
+  payload: () => ({
+    hashtag:       document.getElementById('discHashtag').value.trim(),
+    min_followers: Number(document.getElementById('discMin').value) || 0,
+    max_followers: Number(document.getElementById('discMax').value) || 0,
+  }),
+  render: result => {
+    document.getElementById('discSummary').textContent = result.summary || '';
+    document.getElementById('discCreators').innerHTML = (result.creators || []).map(c => `
+      <div class="creator-row">
+        <div class="creator-main">
+          <div class="creator-handle">
+            @${escHtml(c.username)}
+            ${c.is_verified ? '<span class="verified-badge">✔</span>' : ''}
+            ${c.is_private  ? '<span class="creator-stat-label">🔒 gizli</span>' : ''}
+          </div>
+          ${c.full_name ? `<div class="creator-name">${escHtml(c.full_name)}</div>` : ''}
+          ${c.reason    ? `<div class="creator-reason">${escHtml(c.reason)}</div>` : ''}
+        </div>
+        <div class="creator-stats">
+          <div class="creator-stat">
+            <div class="creator-stat-val">${fmt(c.followers)}</div>
+            <div class="creator-stat-label">Takipçi</div>
+          </div>
+          <div class="creator-stat">
+            <div class="creator-stat-val">${fmt(c.mediacount)}</div>
+            <div class="creator-stat-label">Gönderi</div>
+          </div>
+        </div>
+        ${c.potential ? `<span class="potential-badge ${potClass(c.potential)}">${escHtml(c.potential)}</span>` : ''}
+      </div>
+    `).join('') || '<div class="creator-name">Sonuç bulunamadı.</div>';
+  },
+}));
+
+// ── Trend & hook sohbeti ────────────────────────────────────────────────────
+document.getElementById('trendBtn').addEventListener('click', () => runResearch({
+  prefix: 'trend',
+  url: '/api/research/trend-chat',
+  validate: () => {
+    if (!document.getElementById('trendHashtag').value.trim())  return 'Hashtag girmelisin.';
+    if (!document.getElementById('trendQuestion').value.trim()) return 'Bir soru yazmalısın.';
+    return null;
+  },
+  payload: () => ({
+    hashtag:  document.getElementById('trendHashtag').value.trim(),
+    question: document.getElementById('trendQuestion').value.trim(),
+  }),
+  render: result => {
+    document.getElementById('trendMeta').textContent =
+      `${result.post_count || 0} gerçek gönderi analiz edildi`;
+    document.getElementById('trendAnswer').textContent = result.answer || '—';
+
+    const list = (items, id) => {
+      document.getElementById(id).innerHTML = (items || [])
+        .map(t => `<li>${escHtml(t)}</li>`).join('') || '<li>—</li>';
+    };
+    list(result.observations, 'trendObservations');
+    list(result.hooks,        'trendHooks');
+
+    document.getElementById('trendTopPosts').innerHTML = (result.top_posts || []).map(p => `
+      <div class="trend-post">
+        <div class="trend-post-head">
+          <span class="trend-post-user">@${escHtml(p.owner_username)}</span>
+          <span class="trend-post-stats">
+            ❤ ${fmt(p.likes)} · 💬 ${fmt(p.comments)}${p.video_view_count ? ' · ▶ ' + fmt(p.video_view_count) : ''}
+          </span>
+        </div>
+        <div class="trend-post-caption">${escHtml(p.caption) || '<i>(caption yok)</i>'}</div>
+      </div>
+    `).join('') || '<div class="creator-name">Gönderi bulunamadı.</div>';
+  },
+}));
+
+// ── Script performans analizi ───────────────────────────────────────────────
+document.getElementById('scriptBtn').addEventListener('click', () => runResearch({
+  prefix: 'script',
+  url: '/api/research/analyze-script',
+  validate: () => document.getElementById('scriptText').value.trim() ? null : 'Script metni girmelisin.',
+  payload: () => ({
+    script_text:       document.getElementById('scriptText').value.trim(),
+    performance_notes: document.getElementById('scriptNotes').value.trim(),
+  }),
+  render: result => {
+    const score = Math.max(0, Math.min(100, Number(result.score) || 0));
+    document.getElementById('scriptScore').textContent   = score;
+    document.getElementById('scriptScoreFill').style.width = score + '%';
+    document.getElementById('scriptOverall').textContent  = result.overall       || '—';
+    document.getElementById('scriptHook').textContent     = result.hook_analysis || '—';
+    document.getElementById('scriptAltHook').textContent  = result.alternative_hook || '—';
+
+    const list = (items, id) => {
+      document.getElementById(id).innerHTML = (items || [])
+        .map(t => `<li>${escHtml(t)}</li>`).join('') || '<li>—</li>';
+    };
+    list(result.weak_points,  'scriptWeak');
+    list(result.improvements, 'scriptImprovements');
+  },
+}));
 
 // ── Init ────────────────────────────────────────────────────────────────────
 loadStats();
