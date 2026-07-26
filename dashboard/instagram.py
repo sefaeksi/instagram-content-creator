@@ -1,5 +1,6 @@
 import os
 import requests
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 
 GRAPH = "https://graph.facebook.com/v21.0"
@@ -147,6 +148,49 @@ class InstagramAPI:
                 }
             except Exception:
                 return {}
+
+    def _get_media_parallel(self, limit=90, workers=12):
+        """
+        Same as get_media but fetches per-post insights concurrently.
+        A serial 90-post fetch takes ~2.5 min; parallel brings it to seconds.
+        """
+        data = self._get(
+            f"{self.user_id}/media",
+            fields="id,media_type,timestamp,like_count,comments_count,media_url,thumbnail_url,caption,permalink",
+            limit=limit,
+        )
+        posts = data.get("data", [])
+
+        def attach(post):
+            post["insights"] = self.get_media_insights(post["id"], post.get("media_type", "IMAGE"))
+            return post
+
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            list(pool.map(attach, posts))
+        return posts
+
+    def get_top_content(self, pool=90, top=25):
+        """
+        Pulls up to `pool` recent posts, computes each post's engagement rate
+        (likes+comments+saves / followers), and returns the top `top` by ER.
+        Used by the content-driven idea generator.
+        """
+        account   = self.get_account()
+        followers = account.get("followers_count", 1) or 1
+        posts     = self._get_media_parallel(limit=pool)
+
+        for post in posts:
+            ins  = post.get("insights", {})
+            eng  = ins.get("likes", 0) + ins.get("comments", 0) + ins.get("saved", 0)
+            post["engagement"]      = eng
+            post["engagement_rate"] = round(eng / followers * 100, 2)
+
+        ranked = sorted(posts, key=lambda p: p.get("engagement_rate", 0), reverse=True)
+        return {
+            "account":  account,
+            "pool_size": len(posts),
+            "top":       ranked[:top],
+        }
 
     # ── Aggregate helpers ────────────────────────────────────────────────────
 

@@ -240,3 +240,93 @@ ideas dizisinde tam olarak 5 fikir olsun. Fikirleri en trendden en yaratici/nich
             last_err = e
             continue
     raise last_err
+
+
+def generate_ideas_from_content(top_data: dict) -> dict:
+    """
+    En yuksek engagement rate'e sahip icerikleri analiz edip 25 video fikri uretir.
+    ONEMLI: content-creator.md / hesap stratejisi bilincli olarak KULLANILMAZ —
+    fikirler yalnizca gercek performans verisinden turetilir.
+    """
+    client   = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+    account  = top_data.get("account", {})
+    top      = top_data.get("top", [])
+    username = account.get("username", "hesap")
+
+    fmt_map = {"VIDEO": "Reel", "REEL": "Reel", "CAROUSEL_ALBUM": "Carousel", "IMAGE": "Foto"}
+
+    # En iyi icerikleri kompakt bir tabloya dok — LLM'in analiz edecegi tek girdi bu.
+    content_lines = []
+    for i, p in enumerate(top, 1):
+        ins     = p.get("insights", {})
+        fmt     = fmt_map.get(p.get("media_type", "IMAGE"), p.get("media_type", "?"))
+        caption = (p.get("caption") or "").replace("\n", " ").strip()[:160]
+        content_lines.append(
+            f"{i}. [{fmt}] ER:{p.get('engagement_rate', 0)}% | "
+            f"begeni:{ins.get('likes', 0)} yorum:{ins.get('comments', 0)} "
+            f"kaydetme:{ins.get('saved', 0)} reach:{ins.get('reach', 0)} | "
+            f"caption: {caption or '(bos)'}"
+        )
+    content_block = "\n".join(content_lines) if content_lines else "(veri yok)"
+
+    prompt = f"""Sen bir Instagram icerik stratejistisin. Asagida @{username} hesabinin
+EN YUKSEK ETKILESIM ORANINA (engagement rate) sahip {len(top)} gercek icerigi var,
+en iyiden dusuge dogru siralanmis:
+
+{content_block}
+
+GOREV:
+Bu performans verisini analiz et ve tam olarak 25 yeni video fikri uret.
+
+KESIN KURALLAR:
+- Fikirleri SADECE yukaridaki gercek performans verisinden turet. Hangi format, hangi
+  konu, hangi hook tarzi en yuksek engagement almis — bunlari tespit et ve o kazanan
+  paternleri yeni fikirlere tasi.
+- Hicbir varsayimsal "hesap karakteri", "marka sesi" veya harici strateji KULLANMA.
+  Tek dayanagin bu {len(top)} icerigin verisi.
+- 25 fikrin hepsi birbirinden FARKLI olsun — ayni fikri tekrar etme, farkli aci/format/ton kullan.
+- Yuksek performansli paternleri onceliklendir ama tek bir konuya sikisip kalma; en iyi
+  icerikler bir formatta yogunlasiyorsa fikirlerin cogunlugu o formatta olsun.
+
+Asagidaki JSON'u dondur. Markdown fence veya ekstra metin olmamali.
+TUM METINLER TURKCE OLMALI. Ingilizce klavye karakterleri kullan (ozel Turkce harf yok:
+s-cedilla, g-breve, u-umlaut, o-umlaut, dotless-i, c-cedilla yok).
+
+{{
+  "performance_insight": "Verideki kazanan paternlerin 3-4 cumlelik Turkce analizi — hangi format/konu/hook en yuksek ER almis, neden.",
+  "winning_patterns": [
+    "Veriden cikarilan somut patern 1",
+    "Somut patern 2",
+    "Somut patern 3"
+  ],
+  "ideas": [
+    {{
+      "format": "Reel | Carousel | Foto",
+      "title": "Dikkat cekici Turkce baslik",
+      "hook": "Ilk 3 saniye hook — izleyiciyi durduracak guclu cumle",
+      "key_points": ["Madde 1", "Madde 2", "Madde 3"],
+      "caption": "IG SEO anahtar kelimeli Turkce caption",
+      "cta": "Harekete gecirici mesaj",
+      "based_on": "Bu fikrin hangi performans paternine dayandigi — kisa Turkce not"
+    }}
+  ]
+}}
+
+ideas dizisinde TAM OLARAK 25 fikir olsun. En yuksek performans potansiyeli tasiyanlari basa yaz."""
+
+    models = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"]
+    last_err = None
+    for model in models:
+        try:
+            response = client.models.generate_content(model=model, contents=prompt)
+            raw = response.text.strip()
+            raw = re.sub(r"^```(?:json)?", "", raw).strip()
+            raw = re.sub(r"```$", "", raw).strip()
+            result = json.loads(raw)
+            result["analyzed_count"] = len(top)
+            result["pool_size"]      = top_data.get("pool_size", len(top))
+            return result
+        except Exception as e:
+            last_err = e
+            continue
+    raise last_err

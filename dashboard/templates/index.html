@@ -477,6 +477,7 @@
       <div class="nav-item" data-tab="growth"><span class="icon">📈</span> Büyüme</div>
       <div class="nav-item" data-tab="content"><span class="icon">🎬</span> İçerik Analizi</div>
       <div class="nav-item" data-tab="ai"><span class="icon">🤖</span> AI Danışman</div>
+      <div class="nav-item" data-tab="content-ideas"><span class="icon">🏆</span> Top 25 → Fikir</div>
       <div class="nav-item" data-tab="explore"><span class="icon">🔍</span> Keşfet & Plan</div>
       <div class="nav-item" data-tab="solo"><span class="icon">⚡</span> Solo Leveling</div>
       <div class="nav-item" data-tab="research"><span class="icon">🛰️</span> Araştırma</div>
@@ -735,6 +736,30 @@
 
     </div><!-- /#tab-solo -->
 
+    <!-- CONTENT IDEAS (Top 25 -> 25 fikir) TAB -->
+    <div class="tab-panel" id="tab-content-ideas">
+      <div class="research-box">
+        <div class="research-title">🏆 En İyi 25 İçerik → 25 Video Fikri</div>
+        <div class="research-sub">Son ~90 gönderin arasından etkileşim oranı (engagement rate) en yüksek 25 içeriğin analiz edilir; kazanan paternlere göre 25 yeni video fikri üretilir. Hesap stratejisi dosyasından (<code>content-creator.md</code>) <b>bağımsız</b> — yalnızca gerçek performans verisi kullanılır.</div>
+        <div class="research-form">
+          <button class="generate-btn" id="ciBtn"><span>🏆</span> En İyi 25'i Analiz Et ve 25 Fikir Üret</button>
+        </div>
+        <div id="ciLoading" style="display:none" class="loading"><div class="spinner"></div> En iyi içerikler çekiliyor ve analiz ediliyor... (bu biraz sürebilir)</div>
+        <div id="ciError"   style="display:none" class="error-box"></div>
+      </div>
+
+      <div id="ciResult" style="display:none">
+        <div class="research-box">
+          <div class="research-title">📊 Kazanan Paternler</div>
+          <div class="research-meta" id="ciMeta"></div>
+          <div class="analysis-text" id="ciInsight" style="margin-bottom:14px"></div>
+          <ul class="rule-list" id="ciPatterns"></ul>
+        </div>
+        <div style="font-size:15px;font-weight:700;margin:6px 0 14px;">🎬 25 Video Fikri</div>
+        <div class="idea-cards" id="ciIdeas"></div>
+      </div>
+    </div><!-- /#tab-content-ideas -->
+
     <!-- RESEARCH TAB -->
     <div class="tab-panel" id="tab-research">
 
@@ -842,7 +867,7 @@ let _lastAiResult = null;
 let _lastExploreResult = null;
 
 // ── Tabs ───────────────────────────────────────────────────────────────────
-const TAB_TITLES = { overview:'Genel Bakış', growth:'Büyüme', content:'İçerik Analizi', ai:'AI Danışman', explore:'Keşfet & Plan', solo:'Solo Leveling ⚡', research:'Araştırma 🛰️' };
+const TAB_TITLES = { overview:'Genel Bakış', growth:'Büyüme', content:'İçerik Analizi', ai:'AI Danışman', 'content-ideas':'Top 25 → Fikir 🏆', explore:'Keşfet & Plan', solo:'Solo Leveling ⚡', research:'Araştırma 🛰️' };
 
 document.querySelectorAll('.nav-item').forEach(el => {
   el.addEventListener('click', () => {
@@ -1984,6 +2009,59 @@ document.getElementById('scriptBtn').addEventListener('click', () => runResearch
     list(result.improvements, 'scriptImprovements');
   },
 }));
+
+// ── Top 25 içerik → 25 fikir ────────────────────────────────────────────────
+document.getElementById('ciBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('ciBtn');
+  const original = btn.innerHTML;
+  btn.disabled  = true;
+  btn.innerHTML = '<div class="spinner"></div> Analiz ediliyor...';
+  document.getElementById('ciLoading').style.display = 'flex';
+  document.getElementById('ciResult').style.display  = 'none';
+  document.getElementById('ciError').style.display   = 'none';
+
+  try {
+    const res  = await fetch('/api/content-ideas', {method:'POST'});
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error || 'Bilinmeyen hata');
+    const r = json.result;
+
+    document.getElementById('ciMeta').textContent =
+      `${r.pool_size || 0} gönderi tarandı · en iyi ${r.analyzed_count || 0} içerik analiz edildi · ${(r.ideas||[]).length} fikir üretildi`;
+    document.getElementById('ciInsight').textContent = r.performance_insight || '';
+    document.getElementById('ciPatterns').innerHTML =
+      (r.winning_patterns || []).map(p => `<li>${escHtml(p)}</li>`).join('') || '<li>—</li>';
+
+    document.getElementById('ciIdeas').innerHTML = (r.ideas || []).map((idea, i) => `
+      <div class="idea-card">
+        <div class="idea-header">
+          ${ideaFormatBadge(idea.format || 'Reel')}
+          <span style="font-size:11px;color:var(--muted)">#${i + 1}</span>
+        </div>
+        <div class="idea-body">
+          <div class="idea-title">${escHtml(idea.title)}</div>
+          ${idea.hook ? `<div class="idea-hook">🪝 ${escHtml(idea.hook)}</div>` : ''}
+          <ul class="idea-points">
+            ${(idea.key_points || []).map(k => `<li>${escHtml(k)}</li>`).join('')}
+          </ul>
+          ${idea.caption ? `<div class="idea-caption">${escHtml(idea.caption)}</div>` : ''}
+          ${idea.cta ? `<div class="idea-cta">👉 ${escHtml(idea.cta)}</div>` : ''}
+          ${idea.based_on ? `<div class="idea-why">📊 ${escHtml(idea.based_on)}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('ciResult').style.display = 'block';
+  } catch(e) {
+    const el = document.getElementById('ciError');
+    el.style.display = 'block';
+    el.textContent = 'Hata: ' + e.message;
+  } finally {
+    document.getElementById('ciLoading').style.display = 'none';
+    btn.disabled  = false;
+    btn.innerHTML = original;
+  }
+});
 
 // ── Init ────────────────────────────────────────────────────────────────────
 loadStats();

@@ -15,7 +15,7 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 sys.path.insert(0, str(Path(__file__).parent))
 from instagram import InstagramAPI
 from db       import save_snapshot, get_growth_history, get_weekly_delta
-from advisor     import analyze, generate_reel_ideas
+from advisor     import analyze, generate_reel_ideas, generate_ideas_from_content
 from explore     import generate_explore_plan
 from pdf_export  import build_advisor_pdf, build_explore_pdf
 import instagram_scraper
@@ -120,6 +120,18 @@ def api_reel_ideas():
         if not topic:
             return jsonify({"ok": False, "error": "Konu boş bırakılamaz"}), 400
         result = generate_reel_ideas(topic)
+        return jsonify({"ok": True, "result": result})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route("/api/content-ideas", methods=["POST"])
+def api_content_ideas():
+    """En yuksek engagement rate'li 25 icerigi analiz edip 25 video fikri uretir."""
+    try:
+        ig       = InstagramAPI()
+        top_data = _cached("top_content", lambda: ig.get_top_content(pool=90, top=25))
+        result   = generate_ideas_from_content(top_data)
         return jsonify({"ok": True, "result": result})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
